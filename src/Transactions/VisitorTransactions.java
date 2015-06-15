@@ -44,9 +44,7 @@ public class VisitorTransactions {
 		// initially, we assume item is not in database
 		boolean itemIsInDatabase = false;
 
-		// !!! may have to change 'name' in query
-
-		String queryString = "select * from item where name = " + itemName;
+		String queryString = "select * from item where itemname = " + itemName;
 		try {
 			stmt1 = con.createStatement();
 			// result of query is stored in rs
@@ -151,11 +149,30 @@ public class VisitorTransactions {
 	}
 
 	/*
-	 * Return section that animal with animalName is in, or 'does not exist'.
+	 * Return section that animal with animalName, animalType is in, or 'does not exist'.
 	 */
-	public String getSectionOfAnimal(String animalName) {
-		// to be completed
-		return "";
+	public String getSectionOfAnimal(String animalName, String animalType) {
+		String sectionno = "";
+		
+		Statement stmt1;
+		ResultSet rs;
+		
+		// get section of animal with given name and type
+		String queryString = "select sectionno from animallivein where name = " + animalName + " and type = " + animalType;
+		try {
+			stmt1 = con.createStatement();
+			rs = stmt1.executeQuery(queryString);
+			if (rs.next()) {
+				sectionno = Integer.toString(rs.getInt("sectionno"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (sectionno.equals("")) {
+			return "Animal does not exist.";
+		}
+		
+		return "Animal is in section number " + sectionno + ".";
 	}
 
 	/*
