@@ -106,7 +106,7 @@ public class VisitorTransactions {
 	public String goOnTour(int itemid, String itemname) {
 		
 		// # spots left in the tour
-		int capacity;
+		int capacity = 0;
 		
 		// intially, we assume tour is not available
 		boolean isTourAvailable = false;
@@ -115,7 +115,7 @@ public class VisitorTransactions {
 		Statement stmt2;
 		ResultSet rs;
 		
-		String queryString = "select count(*) from tourdirected where itemid = " + itemid + " and itemname = " + itemname;
+		String queryString = "select * from tourdirected where itemid = " + itemid + " and itemname = " + itemname;
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);
@@ -137,6 +137,9 @@ public class VisitorTransactions {
 		
 		try {
 			stmt2 = con.createStatement();
+			int rowCount = stmt2.executeUpdate("update tourdirected set capacity = " + --capacity + " where itemid = " + itemid + " and itemname = " + itemname);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		return "You are registered for the tour " + itemname + "!";
