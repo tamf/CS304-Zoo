@@ -115,13 +115,16 @@ public class VisitorTransactions {
 		Statement stmt2;
 		ResultSet rs;
 		
+		// select all cols from tourdirected that have the itemid and itemname given
 		String queryString = "select * from tourdirected where itemid = " + itemid + " and itemname = " + itemname;
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);
 			
+			// if a result exists
 			if (rs.next()) {
 				capacity = rs.getInt("capacity");
+				// if capacity available, then tour is available
 				if (capacity > 0) {
 					isTourAvailable = true;
 				}
@@ -135,9 +138,11 @@ public class VisitorTransactions {
 			return "Tour is not available.";
 		}
 		
+		// updating the table: decrease capacity by one
 		try {
 			stmt2 = con.createStatement();
 			int rowCount = stmt2.executeUpdate("update tourdirected set capacity = " + --capacity + " where itemid = " + itemid + " and itemname = " + itemname);
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
