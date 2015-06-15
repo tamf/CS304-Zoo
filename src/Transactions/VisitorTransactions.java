@@ -52,7 +52,7 @@ public class VisitorTransactions {
 			// result of query is stored in rs
 			rs = stmt1.executeQuery(queryString);
 
-			while (rs.next()) {
+			if (rs.next()) {
 				itemIsInDatabase = true;
 				itemid = rs.getInt("itemid");
 				price = rs.getDouble("price");
@@ -100,12 +100,46 @@ public class VisitorTransactions {
 	}
 
 	/*
-	 * Given itemid for tour, check if tour guide is available to do tour and if
-	 * tour is not at capacity.
+	 * Given itemid, itemname for tour, check if tour guide is available to do tour and if
+	 * tour is not at capacity. If tour available, 
 	 */
-	public String goOnTour(int itemid) {
-		// to be completed
-		return "";
+	public String goOnTour(int itemid, String itemname) {
+		
+		// # spots left in the tour
+		int capacity;
+		
+		// intially, we assume tour is not available
+		boolean isTourAvailable = false;
+		
+		Statement stmt1;
+		Statement stmt2;
+		ResultSet rs;
+		
+		String queryString = "select count(*) from tourdirected where itemid = " + itemid + " and itemname = " + itemname;
+		try {
+			stmt1 = con.createStatement();
+			rs = stmt1.executeQuery(queryString);
+			
+			if (rs.next()) {
+				capacity = rs.getInt("capacity");
+				if (capacity > 0) {
+					isTourAvailable = true;
+				}
+			}
+			stmt1.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (!isTourAvailable) {
+			return "Tour is not available.";
+		}
+		
+		try {
+			stmt2 = con.createStatement();
+		}
+		
+		return "You are registered for the tour " + itemname + "!";
 	}
 
 	/*
