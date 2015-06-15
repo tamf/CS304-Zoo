@@ -98,5 +98,30 @@ public class VisitorTransactions {
 
 		return "Item purchased.";
 	}
+	
+	/*
+	 * Given itemid for tour, check if tour guide is available to do tour and if tour is not at capacity. 
+	 */
+	public String goOnTour(int itemid) {
+		// to be completed
+		return "";
+	}
+	
+	/*
+	 * Return section that animal with animalName is in, or 'does not exist'.
+	 */
+	public String getSectionOfAnimal(String animalName) {
+		// to be completed
+		return "";
+	}
+	
+	/*
+	 * Given theme, get section id back or 'does not exist'.
+	 */
+	
+	public String getSectionOfTheme(String theme) {
+		// to be completed
+		return "";
+	}
 
 }
