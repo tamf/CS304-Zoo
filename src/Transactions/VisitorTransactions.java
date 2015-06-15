@@ -98,27 +98,28 @@ public class VisitorTransactions {
 	}
 
 	/*
-	 * Given itemid, itemname for tour, check if tour guide is available to do tour and if
-	 * tour is not at capacity. If tour available, 
+	 * Given itemid, itemname for tour, check if tour guide is available to do
+	 * tour and if tour is not at capacity. If tour available,
 	 */
 	public String goOnTour(int itemid, String itemname) {
-		
+
 		// # spots left in the tour
 		int capacity = 0;
-		
+
 		// intially, we assume tour is not available
 		boolean isTourAvailable = false;
-		
+
 		Statement stmt1;
 		Statement stmt2;
 		ResultSet rs;
-		
-		// select all cols from tourdirected that have the itemid and itemname given
+
+		// select all cols from tourdirected that have the itemid and itemname
+		// given
 		String queryString = "select * from tourdirected where itemid = " + itemid + " and itemname = " + itemname;
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);
-			
+
 			// if a result exists
 			if (rs.next()) {
 				capacity = rs.getInt("capacity");
@@ -131,34 +132,37 @@ public class VisitorTransactions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (!isTourAvailable) {
 			return "Tour is not available.";
 		}
-		
+
 		// updating the table: decrease capacity by one
 		try {
 			stmt2 = con.createStatement();
-			int rowCount = stmt2.executeUpdate("update tourdirected set capacity = " + --capacity + " where itemid = " + itemid + " and itemname = " + itemname);
+			int rowCount = stmt2.executeUpdate("update tourdirected set capacity = " + --capacity + " where itemid = "
+					+ itemid + " and itemname = " + itemname);
 			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return "You are registered for the tour " + itemname + "!";
 	}
 
 	/*
-	 * Return section that animal with animalName, animalType is in, or 'does not exist'.
+	 * Return section that animal with animalName, animalType is in, or 'does
+	 * not exist'.
 	 */
 	public String getSectionOfAnimal(String animalName, String animalType) {
 		String sectionno = "";
-		
+
 		Statement stmt1;
 		ResultSet rs;
-		
+
 		// get section of animal with given name and type
-		String queryString = "select sectionno from animallivein where name = " + animalName + " and type = " + animalType;
+		String queryString = "select sectionno from animallivein where name = " + animalName + " and type = "
+				+ animalType;
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);
@@ -171,7 +175,7 @@ public class VisitorTransactions {
 		if (sectionno.equals("")) {
 			return "Animal does not exist.";
 		}
-		
+
 		return "Animal is in section number " + sectionno + ".";
 	}
 
