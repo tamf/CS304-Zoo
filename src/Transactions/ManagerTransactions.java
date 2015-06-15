@@ -26,4 +26,28 @@ public class ManagerTransactions {
 		return "";
 	}
 
+	/*
+	 * Given theme name and holdingtype, create new enclosure or return 'already
+	 * created' or 'theme does not exist'.
+	 */
+	public String buildEnclosure(String theme, String holdingtype) {
+		// to be completed
+		return "";
+	}
+	
+	/*
+	 * Given animal name, if animal exists and there is food and hasn't been fed yet, every animal of that type will be fed for that day.
+	 */
+	public String feedAnimal(String name) {
+		// to be completed
+		return "";
+	}
+	/*
+	 * Given itemid and amount, purchase that item and update in the item and expense tables.
+	 */
+	public String buySupplies(int itemid, int amount) {
+		// to be completed
+		return "";
+	}
+
 }
