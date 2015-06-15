@@ -53,6 +53,8 @@ public class DatabaseConnection {
 			con = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug", username,
 					password);
 			System.out.println("Connection made");
+			con.setAutoCommit(false);
+			
 /*
 			Statement stmt = con.createStatement();
 			System.out.println("a");
