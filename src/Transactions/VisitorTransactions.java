@@ -40,20 +40,18 @@ public class VisitorTransactions {
 		Statement stmt2;
 		Statement stmt3;
 		ResultSet rs;
-		
 
 		// initially, we assume item is not in database
 		boolean itemIsInDatabase = false;
 
 		String queryString = "select * from item where itemname = " + "'" + itemName + "'";
-		
+
 		try {
 			System.out.println(queryString);
 			stmt1 = con.createStatement();
-			
+
 			// result of query is stored in rs
 			rs = stmt1.executeQuery(queryString);
-			
 
 			if (rs.next()) {
 				itemIsInDatabase = true;
@@ -76,8 +74,9 @@ public class VisitorTransactions {
 		if (qtyinstock == 0) {
 			return "Item not in stock.";
 		}
-		
-		// Get current date and time (in format ddHHmmss) which will be used to generate a unique receiptNo
+
+		// Get current date and time (in format ddHHmmss) which will be used to
+		// generate a unique receiptNo
 		DateFormat dateFormat2 = new SimpleDateFormat("ddHHmmss");
 		Date date = new Date();
 		long currentDateTime = Long.parseLong(dateFormat2.format(date));
@@ -90,10 +89,10 @@ public class VisitorTransactions {
 			int rowCount = stmt2.executeUpdate("update item set qtyinstock = " + --qtyinstock + " where itemid = "
 					+ itemid);
 
-			// insert values into purchase table, the expense will be 5 * the original price
+			// insert values into purchase table
 			stmt3 = con.createStatement();
-			String updateQuery = "insert into purchase values (" + itemid + ", '" + itemName + "', '" + currentDate + "'" + ", "
-					+ visitorno + ", 1" + ", " + currentDateTime + ", " + (5 * price) + ")";
+			String updateQuery = "insert into purchase values (" + itemid + ", '" + itemName + "', '" + currentDate
+					+ "'" + ", " + visitorno + ", 1" + ", " + currentDateTime + ", " + price + ")";
 			System.out.println(updateQuery);
 			int rowCount2 = stmt3.executeUpdate(updateQuery);
 
@@ -109,58 +108,6 @@ public class VisitorTransactions {
 		return "Item purchased.";
 	}
 
-	/*
-	 * Given itemid, itemname for tour, check if tour guide is available to do
-	 * tour and if tour is not at capacity. If tour available,
-	 */
-	public String goOnTour(int itemid, String itemname) {
-
-		// # spots left in the tour
-		int capacity = 0;
-
-		// intially, we assume tour is not available
-		boolean isTourAvailable = false;
-
-		Statement stmt1;
-		Statement stmt2;
-		ResultSet rs;
-
-		// select all cols from tourdirected that have the itemid and itemname
-		// given
-		String queryString = "select * from tourdirected where itemid = " + itemid + " and itemname = " + itemname;
-		try {
-			stmt1 = con.createStatement();
-			rs = stmt1.executeQuery(queryString);
-
-			// if a result exists
-			if (rs.next()) {
-				capacity = rs.getInt("capacity");
-				// if capacity available, then tour is available
-				if (capacity > 0) {
-					isTourAvailable = true;
-				}
-			}
-			stmt1.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		if (!isTourAvailable) {
-			return "Tour is not available.";
-		}
-
-		// updating the table: decrease capacity by one
-		try {
-			stmt2 = con.createStatement();
-			int rowCount = stmt2.executeUpdate("update tourdirected set capacity = " + --capacity + " where itemid = "
-					+ itemid + " and itemname = " + itemname);
-			con.commit();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return "You are registered for the tour " + itemname + "!";
-	}
 
 	/*
 	 * Return section that animal with animalName, animalType is in, or 'does
@@ -197,33 +144,31 @@ public class VisitorTransactions {
 
 	public String getSectionOfTheme(String theme) {
 		// to be completed
-		int               sid = 0;
-		boolean           dne = true;
+		int sid = 0;
+		boolean dne = true;
 		PreparedStatement ps;
-		ResultSet         rs;
-		
+		ResultSet rs;
+
 		try {
-			ps = con.prepareStatement(
-					"SELECT sectionno FROM section WHERE theme = ?");
+			ps = con.prepareStatement("SELECT sectionno FROM section WHERE theme = ?");
 			ps.setString(1, theme);
 			rs = ps.executeQuery();
-			while(rs.next())
-			{
+			while (rs.next()) {
 				sid = rs.getInt(1);
 				dne = false;
-			    System.out.println("Section Number is " + sid);
+				System.out.println("Section Number is " + sid);
 			}
 			ps.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (dne == true) {
 			System.out.println("Theme does not exist!");
 			return "Theme does not exist!";
 		}
-		
+
 		return "Section Number is " + sid;
 	}
 

@@ -15,6 +15,10 @@ public class TestVisitorTransactions {
 		
 		
 		//testPurchaseItem("Hamburger", 1);
+		
+		//testGoOnTour()
+		
+		
 
 		
 
@@ -30,6 +34,8 @@ public class TestVisitorTransactions {
 		String result = vt.purchaseItem(itemName);
 		System.out.println(result);
 	}
+	
+
 	
 	//private static void 
 
