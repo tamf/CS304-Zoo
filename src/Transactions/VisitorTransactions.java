@@ -68,10 +68,12 @@ public class VisitorTransactions {
 		}
 
 		if (!itemIsInDatabase) {
+			System.out.println("Not in database");
 			return "Item not found in database.";
 		}
 
 		if (qtyinstock == 0) {
+			System.out.println("Item not in stock");
 			return "Item not in stock.";
 		}
 
@@ -104,7 +106,7 @@ public class VisitorTransactions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		System.out.println("Item purchased");
 		return "Item purchased.";
 	}
 

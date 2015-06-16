@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 public class LoadQueries {
 	private Connection con;
+	
+	public LoadQueries(Connection con) {
+		this.con = con;
+	}
+	
     public ArrayList<String> queryEmployee() {
 
         Statement stmt1;

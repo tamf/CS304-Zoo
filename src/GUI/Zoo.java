@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import javax.swing.JToggleButton;
 import Transactions.ManagerTransactions;
 import Transactions.VisitorTransactions;
 import DatabaseConnection.DatabaseConnection;
+import Transactions.LoadQueries;
 
 
 public class Zoo extends JDialog {
@@ -37,6 +40,7 @@ public class Zoo extends JDialog {
 	public DatabaseConnection dc;
 	public ManagerTransactions mt; 
 	public VisitorTransactions vt;
+	public LoadQueries lq;
 	
 	public Zoo() {
 		
@@ -45,6 +49,7 @@ public class Zoo extends JDialog {
 		Connection con = dc.getConnection();
 		mt = new ManagerTransactions(con);
 		vt = new VisitorTransactions(con, 1);
+		lq = new LoadQueries(con);
 		
 		initUI();
 		
@@ -138,8 +143,9 @@ public class Zoo extends JDialog {
         			vis1.setForeground(new Color(0, 0, 255).brighter());
         			vis1.addActionListener(new ActionListener() {       				
     	                @Override
-    	                public void actionPerformed(ActionEvent event) {    	                	
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the souvenir you'd like to buy from the zoo's souvenir shop in <b>Field 1</b>.</p>";
+    	                public void actionPerformed(ActionEvent event) {
+    	                	ArrayList<String> input = lq.querySouvenir();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the souvenir you'd like to buy from the zoo's souvenir shop in <b>Field 1</b>.</p><br><br><p> Available Souvenirs:<br>" + makeParagraph(input);
     	                    describe(d, "vis1");
     	                }       				
         			});       			
@@ -150,7 +156,8 @@ public class Zoo extends JDialog {
         			vis2.addActionListener(new ActionListener() {       				
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Go ahead and take a tour! Search for a tour in <b>Field 1</b></p>";
+    	                	ArrayList<String> input = lq.queryTours();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Go ahead and take a tour! Search for a tour in <b>Field 1</b></p><br><br><p> Available Tours:<br>" + makeParagraph(input);
     	                    describe(d, "vis2");
     	                }       				
         			});       			
@@ -161,7 +168,8 @@ public class Zoo extends JDialog {
         			vis3.addActionListener(new ActionListener() {       				
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the food you'd like to buy from the zoo's cafeteria in <b>Field 1</b>.</p>";
+    	                	ArrayList<String> input = lq.queryFood();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the food you'd like to buy from the zoo's cafeteria in <b>Field 1</b>.</p><br><br><p> Available Food:<br>" + makeParagraph(input);
     	                    describe(d, "vis3");
     	                }       				
         			});       			
@@ -536,7 +544,7 @@ public class Zoo extends JDialog {
         		} else {
         			String q4 = mt.hasCheckUp(q2, q1, q3);
         			if (q4 == "Animal does not exist!" || q4 == "Animal has had a checkup on that day.") {
-        				alert("<html><p color='red'>" + q1 + "</p></html>");
+        				alert("<html><p color='red'>" + q4 + "</p></html>");
         			}else {
         				alert("<html><p color='green'>The "+ q1 +" " + q2 + " did not get a checkup on " + q3 +"</p></html>");
         			}                  			
@@ -577,6 +585,17 @@ public class Zoo extends JDialog {
 	
 	private boolean isAlphaNumeric (String toCheck){
 		return toCheck.matches("[a-zA-Z0-9\\s-]+");
+	}
+	
+	private String makeParagraph(List<String> list){
+		
+		String output = "";
+		
+		for (String s : list){
+			output = output + s + "<br>";
+		}
+		
+		return output;
 	}
 	
 	public static void main(String[] args) {
