@@ -18,7 +18,7 @@ public class DatabaseConnection {
 	private static DatabaseConnection databaseConnection = null;
 	public Connection con;
 	
-	private DatabaseConnection() {
+	public DatabaseConnection() {
 	}
 	
 	// singleton pattern: returns instance of DatabaseConnection

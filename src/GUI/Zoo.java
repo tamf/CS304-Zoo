@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,6 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
+
+import Transactions.ManagerTransactions;
+import Transactions.VisitorTransactions;
+import DatabaseConnection.DatabaseConnection;
 
 
 public class Zoo extends JDialog {
@@ -29,8 +34,17 @@ public class Zoo extends JDialog {
 	public JTextArea field1;
 	public JTextArea field2;
 	public JTextArea field3;
+	public DatabaseConnection dc;
+	public ManagerTransactions mt; 
+	public VisitorTransactions vt;
 	
 	public Zoo() {
+		
+		dc = new DatabaseConnection();
+		dc.connectToDB();
+		Connection con = dc.getConnection();
+		mt = new ManagerTransactions(con);
+		vt = new VisitorTransactions(con, 1);
 		
 		initUI();
 		
@@ -317,12 +331,12 @@ public class Zoo extends JDialog {
         String cb = currentbutton;
         switch (cb) {
         	case "vis1":
-        		q1 = field1.getText();
+        		q1 = field1.getText().toString();
         		if (q1 == null || !isAlpha(q1)){
         			alert("<html><p color='red'> You must enter a name for your souvenir in field 1 using valid letters!</p></html>");
         		} else {
-        			// Run Query, check if there is food to buy
-        			if (true) {
+        			q2 = vt.purchaseItem(q1);
+        			if (q2 == "Item purchased") {
         				alert("<html><p color='green'> You bought one "+ q1 +"</p></html>");
         			} else {
         				alert("<html><p color='red'> We are all out of that souvenir!");
@@ -555,7 +569,7 @@ public class Zoo extends JDialog {
 	}
 	
 	private boolean isAlpha (String toCheck){
-		return toCheck.matches("[a-zA-Z]+");
+		return toCheck.matches("[a-zA-Z\\s]+");
 	}
 	
 	private boolean isNumber (String toCheck) {
@@ -563,7 +577,7 @@ public class Zoo extends JDialog {
 	}
 	
 	private boolean isAlphaNumeric (String toCheck){
-		return toCheck.matches("[a-zA-Z0-9]+");
+		return toCheck.matches("[a-zA-Z0-9\\s]+");
 	}
 	
 	public static void main(String[] args) {
