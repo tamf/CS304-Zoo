@@ -91,45 +91,43 @@ public class ManagerTransactions {
 	 * check up today. if no checkup table updated.
 	 */
 	public String checkUpToday(String name, String type, int sin) {
-        // get current date
-        java.util.Date utildate = new Date();
-        java.sql.Date currentdate = new java.sql.Date(utildate.getTime());
-        SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd");
-        String ds = f.format(utildate);
-        String checkToday =  hasCheckUp(name, type, ds);
-        
-        if (checkToday.equals("Animal does not exist!")) {
-        	System.out.println("Animal does not exist!");
-        	return "Animal does not exist!";
-        }
-        	
-        if (checkToday.equals("Animal has had a checkup on that day.")) {
-        	System.out.println("Animal has had a checkup today.");
-            return "Animal has had a checkup today.";
-        }
-        else {
-            PreparedStatement stmt3;
-            try {
-                // insert values into purchase table
-                stmt3 = con.prepareStatement(
-                		"UPDATE checkup SET date_checkup=? WHERE sin=? and type=? and name=?");
-              
-                stmt3.setDate(1, currentdate);
-                stmt3.setInt(2, sin);
-                stmt3.setString(3, type);
-                stmt3.setString(4, name);
-                
-                stmt3.executeUpdate();
-                // committing changes made to database
-                con.commit();
-                stmt3.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Checkup performed.");
-            return "Checkup performed.";
-        }
-    }
+		// get current date
+		java.util.Date utildate = new Date();
+		java.sql.Date currentdate = new java.sql.Date(utildate.getTime());
+		SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd");
+		String ds = f.format(utildate);
+		String checkToday = hasCheckUp(name, type, ds);
+
+		if (checkToday.equals("Animal does not exist!")) {
+			System.out.println("Animal does not exist!");
+			return "Animal does not exist!";
+		}
+
+		if (checkToday.equals("Animal has had a checkup on that day.")) {
+			System.out.println("Animal has had a checkup today.");
+			return "Animal has had a checkup today.";
+		} else {
+			PreparedStatement stmt3;
+			try {
+				// insert values into purchase table
+				stmt3 = con.prepareStatement("UPDATE checkup SET date_checkup=? WHERE sin=? and type=? and name=?");
+
+				stmt3.setDate(1, currentdate);
+				stmt3.setInt(2, sin);
+				stmt3.setString(3, type);
+				stmt3.setString(4, name);
+
+				stmt3.executeUpdate();
+				// committing changes made to database
+				con.commit();
+				stmt3.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Checkup performed.");
+			return "Checkup performed.";
+		}
+	}
 
 	/*
 	 * Given sectionno, theme, create new section or return 'already created'.
@@ -317,6 +315,7 @@ public class ManagerTransactions {
                 if (alreadyfed) {
                     return type + "has already been fed.";
                 } else {
+                	try {
                     stmt4 = con.createStatement();
 
                     // update item's qtystock in item table
@@ -332,15 +331,15 @@ public class ManagerTransactions {
                     con.commit();
                     stmt4.close();
                     stmt5.close();
+                } catch (SQLException e) {
+                	e.printStackTrace();
+                }
                 }
 
-            }catch(SQLException e){
-                e.printStackTrace();
-            }
+            
             return "All " + type + " have been fed!";
-        }
+            }
     }
-
 
 	/*
 	 * Given itemid, amount, purchase that item and update in the item table.
