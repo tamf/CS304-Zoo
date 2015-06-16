@@ -1,10 +1,8 @@
 package Transactions;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,34 +25,63 @@ public class ManagerTransactions {
 	 * has had checkup on that day.
 	 */
 	public String hasCheckUp(String name, String type, String date) {
-
-		Statement stmt1;
-		ResultSet rs;
+		PreparedStatement s1;
+		PreparedStatement s2;
+		ResultSet rs1;
+		ResultSet rs2;
+		boolean todaycheckup = false;
+		boolean dne = true;
+		SimpleDateFormat fm = new SimpleDateFormat("yy-MM-dd");
+		java.util.Date utilDate = null;
+		try {
+			utilDate = fm.parse(date);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 
 		// initally assume that animal has not had checkup today
-		boolean todaycheckup = false;
-
-		String queryString = "select * from checkup where name = " + name + " and type = " + type
-				+ " and date_checkup = " + date;
 		try {
-			stmt1 = con.createStatement();
-			// result of query is stored in rs
-			rs = stmt1.executeQuery(queryString);
+			s1 = con.prepareStatement("select * from checkup where name=? and type=?");
+			s1.setString(1, name);
+			s1.setString(2, type);
+			rs1 = s1.executeQuery();
+			while (rs1.next()) {
+				dne = false;
+			}
+			s1.close();
 
-			if (rs.next()) {
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if (dne == true) {
+			// System.out.println("Animal does not exist!");
+			return "Animal does not exist!";
+		}
+
+		try {
+			s2 = con.prepareStatement("select * from checkup where name=? and type=? and date_checkup=?");
+			s2.setString(1, name);
+			s2.setString(2, type);
+			s2.setDate(3, sqlDate);
+			// result of query is stored in rs
+			rs2 = s2.executeQuery();
+			if (rs2.next()) {
 				todaycheckup = true;
 			}
 			// close statement to free up memory, this closes the ResultSet
 			// object as well
-			stmt1.close();
-
+			s2.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		if (todaycheckup)
+		if (todaycheckup == true) {
+			// System.out.println("Animal has had a checkup on that day.");
 			return "Animal has had a checkup on that day.";
-		else {
+		} else {
+			// System.out.println("Animal has not had a checkup on that day.");
 			return "Animal has not had a checkup on that day.";
 		}
 	}
@@ -64,34 +91,45 @@ public class ManagerTransactions {
 	 * check up today. if no checkup table updated.
 	 */
 	public String checkUpToday(String name, String type, int sin) {
-		// get current date
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		currentDate = dateFormat.format(date);
-
-		String checkToday = hasCheckUp(name, type, currentDate);
-		if (checkToday.equals("Animal has had a checkup on that day.")) {
-			return "Animal has already had a checkup today.";
-		} else {
-			Statement stmt3;
-
-			try {
-				// insert values into purchase table
-				stmt3 = con.createStatement();
-				int rowCount2 = stmt3.executeUpdate("insert into checkup values(" + currentDate + ", " + sin + ", "
-						+ type + ", " + name + ")");
-
-				// committing changes made to database
-				con.commit();
-				stmt3.close();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return "Checkup performed.";
-		}
-
-	}
+        // get current date
+        java.util.Date utildate = new Date();
+        java.sql.Date currentdate = new java.sql.Date(utildate.getTime());
+        SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd");
+        String ds = f.format(utildate);
+        String checkToday =  hasCheckUp(name, type, ds);
+        
+        if (checkToday.equals("Animal does not exist!")) {
+        	System.out.println("Animal does not exist!");
+        	return "Animal does not exist!";
+        }
+        	
+        if (checkToday.equals("Animal has had a checkup on that day.")) {
+        	System.out.println("Animal has had a checkup today.");
+            return "Animal has had a checkup today.";
+        }
+        else {
+            PreparedStatement stmt3;
+            try {
+                // insert values into purchase table
+                stmt3 = con.prepareStatement(
+                		"UPDATE checkup SET date_checkup=? WHERE sin=? and type=? and name=?");
+              
+                stmt3.setDate(1, currentdate);
+                stmt3.setInt(2, sin);
+                stmt3.setString(3, type);
+                stmt3.setString(4, name);
+                
+                stmt3.executeUpdate();
+                // committing changes made to database
+                con.commit();
+                stmt3.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Checkup performed.");
+            return "Checkup performed.";
+        }
+    }
 
 	/*
 	 * Given sectionno, theme, create new section or return 'already created'.
