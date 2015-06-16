@@ -276,12 +276,12 @@ public class Zoo extends JDialog {
 	    			});       			
 	    			mangrid.add(man7);
 	    			
-	    			JButton man8 = new JButton("End Day");
+	    			JButton man8 = new JButton("See Checkup By Day");
 	    			man8.setForeground(new Color(255, 0, 0).brighter());
 	    			man8.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>End a long hard day, resetting animal feeding and tour guide availability.</p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to check for checkups in <b>Field 1</b>.<br><br>Enter the name of the animal you'd like to check for checkups in <b>Field 2</b><br><br>Enter the date of the checkup in <b>Field 3</b></p>";
     	                    describe(d, "man8");
 		                }       				
 	    			});       			
@@ -406,20 +406,13 @@ public class Zoo extends JDialog {
         			alert("<html><p color='red'> You must enter the type of animal you'd like to checkup in field 1 using valid letters!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
         			alert("<html><p color='red'> You must enter the name of the animal you'd like to checkup in field 2 using valid letters!</p></html>");
-        		} else if (q3 == null || !isAlphaNumeric(q3)) {
-        			alert("<html><p color='red'> You must enter the date of the intended checkup in field 1 using valid letters!</p></html>");
+        		} else if (q3 == null || !isNumber(q3)) {
+        			alert("<html><p color='red'> You must enter the vet's ID in field 3 using valid numbers!</p></html>");
         		} else {
-        			// Run Query
-        			q1 = "Tiger";
-        			q2 = "Ben";
-        			q3 = "March 11";
-        			if (false) {
-        				// no animal of that type
-        			} else if (false) {
-        				// no animal of that name and type
-        			} else if (false) {
-        				// animal had checkup on that date
-        			} else {
+        			String q4 = mt.checkUpToday(q2, q1, Integer.parseInt(q3));
+        			if (q4 == "Animal does not exist!" || q4 == "Animal has had a checkup today.") {
+        				alert("<html><p color='red'>" + q1 + "</p></html>");
+        			}else {
         				alert("<html><p color='green'>The "+ q1 +" " + q2 + " got a checkup on " + q3 +"</p></html>");
         			}                  			
         		}
@@ -432,13 +425,9 @@ public class Zoo extends JDialog {
         		} else if (q2 == null || !isNumber(q2)) {
 					alert("<html><p color='red'> You must enter the section number of the section you'd like to build!</p></html>");
         		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Tropical";
-        			q2 = "6";
-        			if (true) {
+        			q3 = mt.buildSection(Integer.parseInt(q2), q1);
+        			if (q3 == "Section Created.") {
         				alert("<html><p color='green'> You built section "+ q1 +" with section id " + q2 +"</p></html>");
-        			} else if (false){
-        				alert("<html><p color='red'> That section id already exists</p></html>");
         			} else {
         				alert("<html><p color='red'> That section theme already exists</p></html>");
         			}
@@ -447,18 +436,14 @@ public class Zoo extends JDialog {
         	case "man3":
         		q1 = field1.getText();
         		q2 = field2.getText();
-        		if (q1 == null || !isAlpha(q1)){
-        			alert("<html><p color='red'> You must enter the name of the section theme you'd like to build your enclosure in!</p></html>");
+        		if (q1 == null || !isNumber(q1)){
+        			alert("<html><p color='red'> You must enter the id of the section theme you'd like to build your enclosure in!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the type of animal you want to keep!</p></html>");
         		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Arctic";
-        			q2 = "12";
-        			if (true) {
+        			q3 = mt.buildEnclosure(Integer.parseInt(q1), q2);
+        			if (q3 == "Enclosure Created.") {
         				alert("<html><p color='green'> You built an enclosure in section "+ q1 +" that will hold animals of type " + q2 +"</p></html>");
-        			} else if (false){
-        				alert("<html><p color='red'> That theme does not exist</p></html>");
         			} else {
         				alert("<html><p color='red'> That enclosure already exists</p></html>");
         			}
@@ -510,17 +495,15 @@ public class Zoo extends JDialog {
         		q1 = field1.getText();
         		q2 = field2.getText();
         		if (q1 == null || !isAlpha(q1)){
-        			alert("<html><p color='red'> You must enter the food you'd like to buy!</p></html>");
+        			alert("<html><p color='red'> You must enter the id of the food you'd like to buy!</p></html>");
         		} else if (q2 == null || !isNumber(q2)) {
 					alert("<html><p color='red'> You must enter the amount of food you'd like to buy!</p></html>");
         		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Tacos";
-        			q2 = "30";
-        			if (true) {
-        				alert("<html><p color='green'> You have bought "+ q2 +" " + q1 + "</p></html>");
+        			q3 = mt.buySupplies(Integer.parseInt(q1), Integer.parseInt(q2));
+        			if (q3 == "itemID entered does not exist.") {
+        				alert("<html><p color='red'> Item does not exist! </p></html>");
         			} else {
-        				alert("<html><p color='red'> The zoo cannot afford that!</p></html>");
+        				alert("<html><p color='green'> Stock updated! </p></html>");
         			}
         		}
         		break;
@@ -528,23 +511,36 @@ public class Zoo extends JDialog {
         		q1 = field1.getText();
         		q2 = field2.getText();
         		if (q1 == null || !isAlpha(q1)){
-        			alert("<html><p color='red'> You must enter the souvenir you'd like to buy!</p></html>");
+        			alert("<html><p color='red'> You must enter the souvenir id you'd like to buy!</p></html>");
         		} else if (q2 == null || !isNumber(q2)) {
 					alert("<html><p color='red'> You must enter the amount of souvenirs you'd like to buy!</p></html>");
         		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Turtle Hat";
-        			q2 = "15";
-        			if (true) {
-        				alert("<html><p color='green'> You have bought "+ q2 +" " + q1 + "</p></html>");
+        			q3 = mt.buySupplies(Integer.parseInt(q1), Integer.parseInt(q2));
+        			if (q3 == "itemID entered does not exist.") {
+        				alert("<html><p color='red'> Item does not exist! </p></html>");
         			} else {
-        				alert("<html><p color='red'> The zoo cannot afford that!</p></html>");
+        				alert("<html><p color='green'> Stock updated! </p></html>");
         			}
         		}
         		break;
         	case "man8":
-        		// Run Query
-        		alert("<html><p green='green'All tour guides and animal hunger levels have been refreshed!");
+        		q1 = field1.getText();
+        		q2 = field2.getText();
+        		q3 = field3.getText();
+        		if (q1 == null || !isAlpha(q1)){
+        			alert("<html><p color='red'> You must enter the type of animal you'd like to check field 1 using valid letters!</p></html>");
+        		} else if (q2 == null || !isAlpha(q2)) {
+        			alert("<html><p color='red'> You must enter the name of the animal you'd like to check in field 2 using valid letters!</p></html>");
+        		} else if (q3 == null || !isAlphaNumeric(q3)) {
+        			alert("<html><p color='red'> You must enter the date in field 3 using valid symbols!</p></html>");
+        		} else {
+        			String q4 = mt.hasCheckUp(q2, q1, q3);
+        			if (q4 == "Animal does not exist!" || q4 == "Animal has had a checkup on that day.") {
+        				alert("<html><p color='red'>" + q1 + "</p></html>");
+        			}else {
+        				alert("<html><p color='green'>The "+ q1 +" " + q2 + " did not get a checkup on " + q3 +"</p></html>");
+        			}                  			
+        		}
         		break;
         	case "mandesc":
         		break;
@@ -580,7 +576,7 @@ public class Zoo extends JDialog {
 	}
 	
 	private boolean isAlphaNumeric (String toCheck){
-		return toCheck.matches("[a-zA-Z0-9\\s]+");
+		return toCheck.matches("[a-zA-Z0-9\\s-]+");
 	}
 	
 	public static void main(String[] args) {

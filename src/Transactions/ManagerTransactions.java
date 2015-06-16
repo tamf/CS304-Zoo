@@ -216,10 +216,10 @@ public class ManagerTransactions {
 	 * yet, every animal of that type will be fed for that day.
 	 */
 	public String feedAnimal(String name, String type, int sin) {
-        String holdingtype;
-        String sectionno;
-        int numberofanimals;
-        int qtyoffood;
+        String holdingtype = null;
+        String sectionno = null;
+        int numberofanimals = 0;
+        int qtyoffood = 0;
         ArrayList<String> typeAnimals;
         Statement stmt1;
         Statement stmt2;
@@ -339,6 +339,7 @@ public class ManagerTransactions {
             
             return "All " + type + " have been fed!";
             }
+        }
     }
 
 	/*
