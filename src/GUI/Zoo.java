@@ -244,9 +244,9 @@ public class Zoo extends JDialog {
 	    			man4.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the animal you'd like to buy in <b>Field 1</b>.</p>";
+		                	ArrayList<String> input = lq.queryAllEnclosures();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of the animal you'd like to buy in <b>Field 1</b><br><br> Enter the name of the animal you'd like to buy in <b>Field 2</b><br><br>Enter the section id you'd like to put the animal in in <b>Field 3</b></p><br><br><p> Enclosures:<br>" + makeParagraph(input);
     	                    describe(d, "man4");
-    	                    // DOES THIS NEED 2 FIELDS FOR MONEY?
 		                }       				
 	    			});       			
 	    			mangrid.add(man4);
@@ -460,22 +460,19 @@ public class Zoo extends JDialog {
         	case "man4":
         		q1 = field1.getText();
         		q2 = field2.getText();
+        		q3 = field3.getText();
         		if (q1 == null || !isAlpha(q1)){
         			alert("<html><p color='red'> You must enter the type of animal you'd like to buy!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the name of the animal you'd like to buy!</p></html>");
-        		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Penguin";
-        			q2 = "Dave";
-        			q3 = "17";
-        			String q4 = "Arctic";
-        			if (true) {
-        				alert("<html><p color='green'> You bought a "+ q1 +" named " + q2 +" that lives in enclosure " + q3 +" in the " + q4 +" section</p></html>");
-        			} else if (false){
-        				alert("<html><p color='green'> You bought a "+ q1 +" named " + q2 +" that lives in enclosure " + q3 +" in the " + q4 +" section</p></html>");
+        		} else if (q3 == null || !isNumber(q2)) {
+					alert("<html><p color='red'> You must enter the section id you'd like to put the animal in!</p></html>");
+        		} else {      			
+        			String q4 = mt.adoptAnimal(q1, q2, getGender(), q1, Integer.parseInt(q3));
+        			if (q4 == "Animal adopted") {
+        				alert("<html><p color='green'> You bought a "+ q1 +" named " + q2 +" that lives in in section " + q4 +"</p></html>");
         			} else {
-        				alert("<html><p color='red'> There is no enclosure for this animal!</p></html>");
+        				alert("<html><p color='red'> That enclosure does not exist!</p></html>");
         			}
         		}
         		break;
@@ -596,6 +593,14 @@ public class Zoo extends JDialog {
 		}
 		
 		return output;
+	}
+	
+	private String getGender(){
+		double i = Math.random();
+		if (i < .5){
+			return "M";
+		} 
+		return "F";
 	}
 	
 	public static void main(String[] args) {
