@@ -120,8 +120,8 @@ public class VisitorTransactions {
 		ResultSet rs;
 
 		// get section of animal with given name and type
-		String queryString = "select sectionno from animallivein where name = " + animalName + " and type = "
-				+ animalType;
+		String queryString = "select sectionno from animallivein where name = " + "'" + animalName + "'" + " and type = "
+				+ "'" + animalType + "'";
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);

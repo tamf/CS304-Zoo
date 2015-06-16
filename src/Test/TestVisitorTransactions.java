@@ -16,7 +16,8 @@ public class TestVisitorTransactions {
 		
 		//testPurchaseItem("Hamburger", 1);
 		
-		//testGoOnTour()
+		
+		//testGetSectionOfAnimal("Angel", "Dolphin");
 		
 		
 
@@ -32,6 +33,11 @@ public class TestVisitorTransactions {
 
 	private static void testPurchaseItem(String itemName, int visitorno) {
 		String result = vt.purchaseItem(itemName);
+		System.out.println(result);
+	}
+	
+	private static void testGetSectionOfAnimal(String animalName, String animalType) {
+		String result = vt.getSectionOfAnimal(animalName, animalType);
 		System.out.println(result);
 	}
 	
