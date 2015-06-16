@@ -212,18 +212,14 @@ public class ManagerTransactions {
 	}
 
 	/*
-	 * Given animal name, if animal exists and there is food and hasn't been fed
-	 * yet, every animal of that type will be fed for that day.
+	 * Given animal type, if exists and there is enough food and those animals
+	 * haven't been fed yet, every animal of that type will be fed for that day.
+	 * sin is for the zookeeper
 	 */
-<<<<<<< HEAD
+
 	public String feedAnimal(String name, String type, int sin) {
         String holdingtype = null;
         String sectionno = null;
-=======
-	public String feedAnimal(String type, int sin) {
-        String holdingtype;
-        String sectionno;
->>>>>>> 96db31e27347b2461ca7c58d15b1cff170d5fad0
         int numberofanimals = 0;
         int qtyoffood = 0;
         ArrayList<String> typeAnimals;
@@ -330,6 +326,111 @@ public class ManagerTransactions {
         }
     }
 
+	public String feedAnimal(String type, int sin) {
+		String holdingtype;
+		String sectionno;
+		int numberofanimals = 0;
+		int qtyoffood = 0;
+		ArrayList<String> typeAnimals;
+		Statement stmt1;
+		Statement stmt2;
+		Statement stmt3;
+		Statement stmt4;
+		Statement stmt5;
+		Statement stmt6;
+		ResultSet rs;
+
+		// initially, we assume false for all booleans
+		boolean animalexists = false;
+		boolean alreadyfed = false;
+
+		String queryString = "select * from enclosurehas where holdingtype = '" + type + "'";
+		try {
+			stmt1 = con.createStatement();
+			rs = stmt1.executeQuery(queryString);
+
+			if (rs.next()) {
+				animalexists = true;
+				holdingtype = rs.getString("holdingtype");
+				sectionno = rs.getString("sectionno");
+				numberofanimals = rs.getInt("numberofanimals");
+			}
+			stmt1.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		if (!animalexists) {
+			return "This animal does not exist.";
+		} else {
+			String queryString3 = "select * from item where itemname = 'Animal Feed' and itemid = 20 ";
+			try {
+				stmt3 = con.createStatement();
+				// result of query is stored in rs
+				rs = stmt3.executeQuery(queryString3);
+
+				if (rs.next()) {
+					qtyoffood = rs.getInt("qtyinstock");
+				}
+				// close statement to free up memory, this closes the ResultSet
+				// object as well
+				stmt3.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if (qtyoffood < numberofanimals)
+				return "Not enough food to feed all animals.";
+			else {
+				String queryString6 = "select * from feeds where type = '" + type + "' and datefed = '" + currentDate
+						+ "'";
+				try {
+					stmt6 = con.createStatement();
+					// result of query is stored in rs
+					rs = stmt6.executeQuery(queryString6);
+
+					if (rs.next()) {
+						alreadyfed = true;
+					}
+					// close statement to free up memory, this closes the
+					// ResultSet
+					// object as well
+					stmt6.close();
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				if (alreadyfed) {
+					return type + "have already been fed.";
+				} else {
+					try {
+						stmt4 = con.createStatement();
+
+						// update item's qtystock in item table
+						stmt4.executeUpdate("update item set qtyinstock = " + (qtyoffood - numberofanimals)
+								+ " where itemid = 20 " + "and itemname = 'Animal Feed'");
+
+						// insert values into feeds table
+						stmt5 = con.createStatement();
+						stmt5.executeUpdate("insert into feeds values (20, 'Animal Feed', '" + type + "', " + sin
+								+ ", '" + currentDate + "'");
+
+						// committing changes made to database
+						con.commit();
+						stmt4.close();
+						stmt5.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					return "All " + type + " have been fed!";
+				}
+			}
+		}
+	}
+
+
+
 	/*
 	 * Given itemid, amount, purchase that item and update in the item table.
 	 */
@@ -371,5 +472,31 @@ public class ManagerTransactions {
 		}
 
 		return "Stock updated.";
+	}
+	
+	public String adoptAnimal(String type, String name, String sex, String ht, int sn) {
+		java.util.Date utilDate = new Date();
+		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+		
+		try {
+			PreparedStatement ps = con.prepareStatement(
+					"insert into animallivein values(?,?,?,?,?,?)");
+			ps.setString(1, type);
+			ps.setString(2, name);
+			ps.setString(3, sex);
+			ps.setDate(4,sqlDate);
+			ps.setString(5,ht);
+			ps.setInt(6, sn);
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		System.out.println("Animal adopted");
+		return "Animal adopted";
 	}
 }

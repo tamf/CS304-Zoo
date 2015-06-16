@@ -23,6 +23,8 @@ public class TestManagerTransactions {
 		//testBuildEnclosure(2, "Lions");
 		
 		//testBuySupplies(1001, 20);
+		
+		testFeedAnimal("Dolphins", 60839453);
 
 	}
 
@@ -44,6 +46,11 @@ public class TestManagerTransactions {
 	
 	private static void testBuySupplies(int itemid, int amount) {
 		String result = mt.buySupplies(itemid, amount);
+		System.out.println(result);
+	}
+	
+	private static void testFeedAnimal(String type, int sin) {
+		String result = mt.feedAnimal(type, sin);
 		System.out.println(result);
 	}
 	
