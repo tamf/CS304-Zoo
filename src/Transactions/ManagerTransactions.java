@@ -334,7 +334,7 @@ public class ManagerTransactions {
                 } catch (SQLException e) {
                 	e.printStackTrace();
                 }
-                }
+                
 
             
             return "All " + type + " have been fed!";

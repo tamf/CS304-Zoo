@@ -336,11 +336,13 @@ public class Zoo extends JDialog {
         			alert("<html><p color='red'> You must enter a name for your souvenir in field 1 using valid letters!</p></html>");
         		} else {
         			q2 = vt.purchaseItem(q1);
-        			if (q2 == "Item purchased") {
+        			alert(q2);
+        			/*if (q2 == "Item purchased") {
         				alert("<html><p color='green'> You bought one "+ q1 +"</p></html>");
         			} else {
         				alert("<html><p color='red'> We are all out of that souvenir!");
         			}
+        			*/
         		}
         		break;
         	case "vis2":
