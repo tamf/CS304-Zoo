@@ -150,7 +150,7 @@ public class Zoo extends JDialog {
         			vis2.addActionListener(new ActionListener() {       				
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Go ahead and take a tour! No field entry required..</p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Go ahead and take a tour! Search for a tour in <b>Field 1</b></p>";
     	                    describe(d, "vis2");
     	                }       				
         			});       			
@@ -336,30 +336,33 @@ public class Zoo extends JDialog {
         			alert("<html><p color='red'> You must enter a name for your souvenir in field 1 using valid letters!</p></html>");
         		} else {
         			q2 = vt.purchaseItem(q1);
-        			alert(q2);
-        			/*if (q2 == "Item purchased") {
+        			if (q2 == "Item purchased.") {
         				alert("<html><p color='green'> You bought one "+ q1 +"</p></html>");
         			} else {
         				alert("<html><p color='red'> We are all out of that souvenir!");
         			}
-        			*/
         		}
         		break;
         	case "vis2":
-        		// Run Query, implement if statement to check if there is available guide
-    			if (true) {
-    				alert("<html><p color='green'>Enjoy your tour!</p></html>");
-    			} else {
-    				alert("<html><p color='red'> No tour guides are available!");
-    			}
+        		q1 = field1.getText().toString();
+        		if (q1 == null || !isAlpha(q1)){
+        			alert("<html><p color='red'> You must enter a name for your tour in field 1 using valid letters!</p></html>");
+        		} else {
+        			q2 = vt.purchaseItem(q1);
+        			if (q2 == "Item purchased.") {
+        				alert("<html><p color='green'> You are going on the "+ q1 +"</p></html>");
+        			} else {
+        				alert("<html><p color='red'> That tour is full!");
+        			}
+        		}
         		break;
         	case "vis3":
         		q1 = field1.getText();
         		if (q1 == null || !isAlpha(q1)){
         			alert("<html><p color='red'> You must enter the type of food you'd like to order in field 1 using valid letters!</p></html>");
         		} else {
-        			// Run Query, check if there is food to buy
-        			if (true) {
+        			q2 = vt.purchaseItem(q1);
+        			if (q2 == "Item purchased.") {
         				alert("<html><p color='green'> You bought one "+ q1 +"</p></html>");
         			} else {
         				alert("<html><p color='red'> We are all out of that type of food!");
@@ -374,13 +377,11 @@ public class Zoo extends JDialog {
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the name of the animal you'd like to find in field 2 using valid letters!</p></html>");
         		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Arctic";
-        			q2 = "12";
-        			if (true) {
-        				alert("<html><p color='green'> The animal lives in the "+ q1 +" section in enclosure " + q2 +"</p></html>");
-        			} else {
+        			q1 = vt.getSectionOfAnimal(q2, q1);
+        			if (q1 == "Animal does not exist.") {
         				alert("<html><p color='red'> The animal does not live at this zoo</p></html>");
+        			} else {
+        				alert("<html><p color='green'> The animal lives in the "+ q1 +" section</p></html>");
         			}
         		}
         		break;
@@ -389,11 +390,11 @@ public class Zoo extends JDialog {
         		if (q1 == null || !isAlpha(q1)){
         			alert("<html><p color='red'> You must enter the name of that section you'd like to find in field 1 using valid letters!</p></html>");
         		} else {
-        			// Run Query, check if there is food to buy
-        			if (true) {
-        				alert("<html><p color='green'> The section id of that section is "+ q1 +"</p></html>");
-        			} else {
+        			q1 = vt.getSectionOfTheme(q1);
+        			if (q1 == "Theme does not exist!") {
         				alert("<html><p color='red'> That is not a section at this zoo!");
+        			} else {
+        				alert("<html><p color='green'> The section id of that section is "+ q1 +"</p></html>");
         			}
         		}
         		break;
