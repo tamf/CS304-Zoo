@@ -255,7 +255,6 @@ public class ManagerTransactions {
 		if (!animalexists) {
 			return "This animal does not exist.";
 		} else {
-
 			String queryString3 = "select * from item where itemname = 'Animal Feed' and itemid = 20 ";
 			try {
 				stmt3 = con.createStatement();
@@ -444,7 +443,7 @@ public class ManagerTransactions {
 		return "Stock updated.";
 	}
 	
-	public String adaptAnimal(String type, String name, String sex, String ht, int sn) {
+	public String adoptAnimal(String type, String name, String sex, String ht, int sn) {
 		java.util.Date utilDate = new Date();
 		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 		
@@ -466,7 +465,7 @@ public class ManagerTransactions {
 		}
 		
 		
-		System.out.println("Animal adapted");
-		return "Animal adapted";
+		System.out.println("Animal adopted");
+		return "Animal adopted";
 	}
 }
