@@ -7,13 +7,14 @@ import Transactions.VisitorTransactions;
 
 public class TestVisitorTransactions {
 	private static Connection con;
+	private static VisitorTransactions vt;
 
 	public static void main(String[] args) {
 		connectToDatabase();
+		vt = new VisitorTransactions(con, 1);
 		
 		
-		
-		testPurchaseItem("Hamburger", 1);
+		//testPurchaseItem("Hamburger", 1);
 
 		
 
@@ -26,9 +27,10 @@ public class TestVisitorTransactions {
 	}
 
 	private static void testPurchaseItem(String itemName, int visitorno) {
-		VisitorTransactions vt = new VisitorTransactions(con, visitorno);
 		String result = vt.purchaseItem(itemName);
 		System.out.println(result);
 	}
+	
+	//private static void 
 
 }

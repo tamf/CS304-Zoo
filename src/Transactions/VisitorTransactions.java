@@ -77,7 +77,7 @@ public class VisitorTransactions {
 			return "Item not in stock.";
 		}
 		
-		// Get current date and time, which will be used to generate a unique receiptNo
+		// Get current date and time (in format ddHHmmss) which will be used to generate a unique receiptNo
 		DateFormat dateFormat2 = new SimpleDateFormat("ddHHmmss");
 		Date date = new Date();
 		long currentDateTime = Long.parseLong(dateFormat2.format(date));
@@ -90,7 +90,7 @@ public class VisitorTransactions {
 			int rowCount = stmt2.executeUpdate("update item set qtyinstock = " + --qtyinstock + " where itemid = "
 					+ itemid);
 
-			// insert values into purchase table
+			// insert values into purchase table, the expense will be 5 * the original price
 			stmt3 = con.createStatement();
 			String updateQuery = "insert into purchase values (" + itemid + ", '" + itemName + "', '" + currentDate + "'" + ", "
 					+ visitorno + ", 1" + ", " + currentDateTime + ", " + (5 * price) + ")";
@@ -197,7 +197,34 @@ public class VisitorTransactions {
 
 	public String getSectionOfTheme(String theme) {
 		// to be completed
-		return "";
+		int               sid = 0;
+		boolean           dne = true;
+		PreparedStatement ps;
+		ResultSet         rs;
+		
+		try {
+			ps = con.prepareStatement(
+					"SELECT sectionno FROM section WHERE theme = ?");
+			ps.setString(1, theme);
+			rs = ps.executeQuery();
+			while(rs.next())
+			{
+				sid = rs.getInt(1);
+				dne = false;
+			    System.out.println("Section Number is " + sid);
+			}
+			ps.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (dne == true) {
+			System.out.println("Theme does not exist!");
+			return "Theme does not exist!";
+		}
+		
+		return "Section Number is " + sid;
 	}
 
 }
