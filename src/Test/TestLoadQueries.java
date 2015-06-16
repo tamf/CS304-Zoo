@@ -15,10 +15,7 @@ public class TestLoadQueries {
 		connectToDatabase();
 		lq = new LoadQueries(con);
 		
-		
-
-
-
+		testQueryEmployee();
 	}
 
 	private static void connectToDatabase() {
