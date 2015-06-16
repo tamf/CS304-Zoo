@@ -54,14 +54,6 @@ public class DatabaseConnection {
 					password);
 			System.out.println("Connection made");
 			con.setAutoCommit(false);
-			
-/*
-			Statement stmt = con.createStatement();
-			System.out.println("a");
-			int rowCount = stmt.executeUpdate("drop TABLE Student1");
-			System.out.println("b");
-			System.out.println(rowCount);
-			*/
 
 		} catch (SQLException e) {
 			System.out.println("SQL Exception making connection");

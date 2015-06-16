@@ -40,15 +40,20 @@ public class VisitorTransactions {
 		Statement stmt2;
 		Statement stmt3;
 		ResultSet rs;
+		
 
 		// initially, we assume item is not in database
 		boolean itemIsInDatabase = false;
 
-		String queryString = "select * from item where itemname = " + itemName;
+		String queryString = "select * from item where itemname = " + "'" + itemName + "'";
+		
 		try {
+			System.out.println(queryString);
 			stmt1 = con.createStatement();
+			
 			// result of query is stored in rs
 			rs = stmt1.executeQuery(queryString);
+			
 
 			if (rs.next()) {
 				itemIsInDatabase = true;
@@ -71,6 +76,11 @@ public class VisitorTransactions {
 		if (qtyinstock == 0) {
 			return "Item not in stock.";
 		}
+		
+		// Get current date and time, which will be used to generate a unique receiptNo
+		DateFormat dateFormat2 = new SimpleDateFormat("ddHHmmss");
+		Date date = new Date();
+		long currentDateTime = Long.parseLong(dateFormat2.format(date));
 
 		// User purchases item
 		try {
@@ -82,8 +92,10 @@ public class VisitorTransactions {
 
 			// insert values into purchase table
 			stmt3 = con.createStatement();
-			int rowCount2 = stmt3.executeUpdate("insert into purchase values (" + itemid + ", " + currentDate + ", "
-					+ visitorno + ")");
+			String updateQuery = "insert into purchase values (" + itemid + ", '" + itemName + "', '" + currentDate + "'" + ", "
+					+ visitorno + ", 1" + ", " + currentDateTime + ", " + (5 * price) + ")";
+			System.out.println(updateQuery);
+			int rowCount2 = stmt3.executeUpdate(updateQuery);
 
 			// committing changes made to database
 			con.commit();
