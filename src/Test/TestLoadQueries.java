@@ -1,6 +1,7 @@
 package Test;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import DatabaseConnection.DatabaseConnection;
 import LoadQueries.LoadQueries;
@@ -13,6 +14,8 @@ public class TestLoadQueries {
 	public static void main(String[] args) {
 		connectToDatabase();
 		lq = new LoadQueries(con);
+		
+		
 
 
 
@@ -23,20 +26,16 @@ public class TestLoadQueries {
 		d.connectToDB();
 		con = d.getConnection();
 	}
-
-	private static void testBuildSection(int sectionNo, String theme) {
-		String result = mt.buildSection(sectionNo, theme);
-		System.out.println(result);
+	
+	private static void testQueryEmployee() {
+		ArrayList<String> result = lq.queryEmployee();
+		for (String s : result) {
+			System.out.println(s);
+		}
 	}
-
-	private static void testBuildEnclosure(int sectionno, String holdingtype) {
-		String result = mt.buildEnclosure(sectionno, holdingtype);
-		System.out.println(result);
-	}
-
-	private static void testBuySupplies(int itemid, int amount) {
-		String result = mt.buySupplies(itemid, amount);
-		System.out.println(result);
-	}
-
+	
+	
+	
 }
+
+	
