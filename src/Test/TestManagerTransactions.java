@@ -18,7 +18,11 @@ public class TestManagerTransactions {
 
 		// testGetSectionOfAnimal("Angel", "Dolphin");
 		
-		testBuildSection(6, "Stuff");
+		//testBuildSection(6, "Stuff");
+		
+		//testBuildEnclosure(2, "Lions");
+		
+		//testBuySupplies(1001, 20);
 
 	}
 
@@ -32,5 +36,17 @@ public class TestManagerTransactions {
 		String result = mt.buildSection(sectionNo, theme);
 		System.out.println(result);
 	}
+	
+	private static void testBuildEnclosure(int sectionno, String holdingtype) {
+		String result = mt.buildEnclosure(sectionno, holdingtype);
+		System.out.println(result);
+	}
+	
+	private static void testBuySupplies(int itemid, int amount) {
+		String result = mt.buySupplies(itemid, amount);
+		System.out.println(result);
+	}
+	
+	
 
 }

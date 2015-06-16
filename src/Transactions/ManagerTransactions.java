@@ -143,28 +143,23 @@ public class ManagerTransactions {
 		Statement stmt1;
 		ResultSet rs;
 
-		// assume section does not exist initally
-		boolean enclosureExist = false;
-
-		String queryString = "select * from enclosurehas where holdingtype = " + "'" + holdingtype + "'" + " and sectionno = "
-				+ sectionno;
+		String queryString = "select * from enclosurehas where holdingtype = " + "'" + holdingtype + "'"
+				+ " and sectionno = " + sectionno;
 		try {
 			stmt1 = con.createStatement();
-			// result of query is stored in rs
 			rs = stmt1.executeQuery(queryString);
 
 			if (rs.next()) {
-				enclosureExist = true;
+				return "Enclosure already exists. Try building another enclosure.";
 			} else {
 				Statement stmt3;
 
 				try {
 					// insert values into section table
 					stmt3 = con.createStatement();
-					stmt3.executeUpdate("insert into enclosurehas values(" + holdingtype + ", " + 0 + ", " + sectionno
-							+ ")");
+					stmt3.executeUpdate("insert into enclosurehas values('" + holdingtype + "', " + 0 + ", "
+							+ sectionno + ")");
 
-					// committing changes made to database
 					con.commit();
 					stmt3.close();
 
@@ -172,17 +167,12 @@ public class ManagerTransactions {
 					e.printStackTrace();
 				}
 			}
-			// close statement to free up memory, this closes the ResultSet
-			// object aswell
 			stmt1.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (enclosureExist)
-			return "Enclosure already exists. Try building another enclosure.";
-		else {
-			return "Enclosure Created.";
-		}
+		return "Enclosure Created.";
+
 	}
 
 	/*
@@ -289,12 +279,45 @@ public class ManagerTransactions {
 	}
 
 	/*
-	 * Given itemid and amount, purchase that item and update in the item and
-	 * expense tables.
+	 * Given itemid, amount, purchase that item and update in the item table.
 	 */
 	public String buySupplies(int itemid, int amount) {
-		// to be completed
-		return "";
-	}
+		int qtyinstock = 0;
+		int newqtyinstock;
+		double totalcost;
 
+		Statement stmt1;
+		Statement stmt2;
+		Statement stmt3;
+
+		ResultSet rs;
+
+		// Determine if item with given itemID exists
+		String queryString1 = "select * from item where itemid = " + itemid;
+		System.out.println(queryString1);
+		try {
+			stmt1 = con.createStatement();
+			rs = stmt1.executeQuery(queryString1);
+			if (rs.next()) {
+				qtyinstock = rs.getInt("qtyinstock");
+			} else {
+				return "itemID entered does not exist.";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Update item table with newqtyinstock
+		newqtyinstock = qtyinstock + amount;
+		String queryString2 = "update item set qtyinstock = " + newqtyinstock + " where itemid = " + itemid;
+		System.out.println(queryString2);
+		try {
+			stmt2 = con.createStatement();
+			rs = stmt2.executeQuery(queryString2);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return "Stock updated.";
+	}
 }
