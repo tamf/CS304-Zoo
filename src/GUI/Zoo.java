@@ -493,7 +493,7 @@ public class Zoo extends JDialog {
         			alert("<html><p color='red'> You must enter the type of animal you'd like to feed!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the name of the animal you'd like to feed!</p></html>");
-        		} else if (q2 == null || !isNumber(q2)) {
+        		} else if (q2 == null || !isNumber(q3)) {
 					alert("<html><p color='red'> You must enter the sin of the employee that will feed the animal!</p></html>");
         		} else {
         			// Run Query, check if the animal exists
