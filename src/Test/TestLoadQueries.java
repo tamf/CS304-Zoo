@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import DatabaseConnection.DatabaseConnection;
-import LoadQueries.LoadQueries;
+import Transactions.LoadQueries;
 import Transactions.ManagerTransactions;
 
 public class TestLoadQueries {
@@ -15,7 +15,7 @@ public class TestLoadQueries {
 		connectToDatabase();
 		lq = new LoadQueries(con);
 		
-		testQueryEmployee();
+		
 	}
 
 	private static void connectToDatabase() {
@@ -24,12 +24,7 @@ public class TestLoadQueries {
 		con = d.getConnection();
 	}
 	
-	private static void testQueryEmployee() {
-		ArrayList<String> result = lq.queryEmployee();
-		for (String s : result) {
-			System.out.println(s);
-		}
-	}
+	
 	
 	
 	

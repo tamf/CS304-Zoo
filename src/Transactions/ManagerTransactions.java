@@ -212,223 +212,78 @@ public class ManagerTransactions {
 	}
 
 	/*
-	 * Given animal type, if exists and there is enough food and those animals
-	 * haven't been fed yet, every animal of that type will be fed for that day.
-	 * sin is for the zookeeper
+	 * Check if animal exists. Check if sin exists. Check if animal has already
+	 * been fed. Then feed animal.
 	 */
 
-	public String feedAnimal(String name, String type, int sin) {
-        String holdingtype = null;
-        String sectionno = null;
-        int numberofanimals = 0;
-        int qtyoffood = 0;
-        ArrayList<String> typeAnimals;
-        Statement stmt1;
-        Statement stmt2;
-        Statement stmt3;
-        Statement stmt4;
-        Statement stmt5;
-        Statement stmt6;
-        Statement stmt7;
-        Statement stmt8;
-        ResultSet rs;
-
-        // initially, we assume false for all booleans
-        boolean animalexists = false;
-        boolean alreadyfed = false;
-
-        String queryString = "select * from enclosurehas where holdingtype = '"
-                + type + "'";
-        try {
-            stmt1 = con.createStatement();
-            // result of query is stored in rs
-            rs = stmt1.executeQuery(queryString);
-
-            if (rs.next()) {
-                animalexists = true;
-                holdingtype = rs.getString("holdingtype");
-                sectionno = rs.getString("sectionno");
-                numberofanimals = rs.getInt("numberofanimals");
-            }
-            // close statement to free up memory, this closes the ResultSet
-            // object as well
-            stmt1.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (!animalexists) {
-            return "This animal does not exist.";
-        } else {
-
-            String queryString3 = "select * from item where itemname = 'Animal Feed' and itemid = 20 ";
-            try {
-                stmt3 = con.createStatement();
-                // result of query is stored in rs
-                rs = stmt3.executeQuery(queryString3);
-
-                if (rs.next()) {
-                    qtyoffood = rs.getInt("qtyinstock");
-                }
-                // close statement to free up memory, this closes the ResultSet
-                // object as well
-                stmt3.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            if (qtyoffood < numberofanimals)
-                return "Not enough food to feed all animals.";
-            else {
-                String queryString6 = "select * from feeds where type = '" + type +
-                        "' and datefed = '" + currentDate + "'";
-                try {
-                    stmt6 = con.createStatement();
-                    // result of query is stored in rs
-                    rs = stmt6.executeQuery(queryString6);
-
-                    if (rs.next()) {
-                        alreadyfed = true;
-                    }
-                    // close statement to free up memory, this closes the ResultSet
-                    // object as well
-                    stmt6.close();
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                if (alreadyfed) {
-                    return type + "have already been fed.";
-                } else {
-                    try {
-                        stmt4 = con.createStatement();
-
-                        // update item's qtystock in item table
-                        stmt4.executeUpdate("update item set qtyinstock = " + (qtyoffood - numberofanimals) + " where itemid = 20 " +
-                                "and itemname = 'Animal Feed'");
-
-                        // insert values into feeds table
-                        stmt5 = con.createStatement();
-                        stmt5.executeUpdate("insert into feeds values (20, 'Animal Feed', '" + type +
-                                "', " + sin + ", '" + currentDate + "'");
-
-                        // committing changes made to database
-                        con.commit();
-                        stmt4.close();
-                        stmt5.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    return "All " + type + " have been fed!";
-                }
-            }
-        }
-    }
-
-	public String feedAnimal(String type, int sin) {
-		String holdingtype;
-		String sectionno;
-		int numberofanimals = 0;
-		int qtyoffood = 0;
-		ArrayList<String> typeAnimals;
+	public String feedAnimal(String type, String name, int sin) {
 		Statement stmt1;
 		Statement stmt2;
 		Statement stmt3;
 		Statement stmt4;
-		Statement stmt5;
-		Statement stmt6;
 		ResultSet rs;
 
-		// initially, we assume false for all booleans
-		boolean animalexists = false;
-		boolean alreadyfed = false;
-
-		String queryString = "select * from enclosurehas where holdingtype = '" + type + "'";
+		// Query if animal exists in animallivein table
+		String queryString1 = "select * from animallivein where type = '" + type + "' and name = '" + name + "'";
+		System.out.println(queryString1);
 		try {
 			stmt1 = con.createStatement();
-			rs = stmt1.executeQuery(queryString);
-
-			if (rs.next()) {
-				animalexists = true;
-				holdingtype = rs.getString("holdingtype");
-				sectionno = rs.getString("sectionno");
-				numberofanimals = rs.getInt("numberofanimals");
+			rs = stmt1.executeQuery(queryString1);
+			if (!rs.next()) {
+				System.out.println("Animal does not exist");
+				return "Animal does not exist.";
 			}
-			stmt1.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		if (!animalexists) {
-			return "This animal does not exist.";
-		} else {
-			String queryString3 = "select * from item where itemname = 'Animal Feed' and itemid = 20 ";
-			try {
-				stmt3 = con.createStatement();
-				// result of query is stored in rs
-				rs = stmt3.executeQuery(queryString3);
-
-				if (rs.next()) {
-					qtyoffood = rs.getInt("qtyinstock");
-				}
-				// close statement to free up memory, this closes the ResultSet
-				// object as well
-				stmt3.close();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
+		// Query if sin exists
+		String queryString2 = "select * from employee where sin = " + sin;
+		System.out.println(queryString2);
+		try {
+			stmt2 = con.createStatement();
+			rs = stmt2.executeQuery(queryString2);
+			if (!rs.next()) {
+				System.out.println("Employee with given SIN does not exist.");
+				return "Employee with given SIN does not exist.";
 			}
-			if (qtyoffood < numberofanimals)
-				return "Not enough food to feed all animals.";
-			else {
-				String queryString6 = "select * from feeds where type = '" + type + "' and datefed = '" + currentDate
-						+ "'";
-				try {
-					stmt6 = con.createStatement();
-					// result of query is stored in rs
-					rs = stmt6.executeQuery(queryString6);
-
-					if (rs.next()) {
-						alreadyfed = true;
-					}
-					// close statement to free up memory, this closes the
-					// ResultSet
-					// object as well
-					stmt6.close();
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				if (alreadyfed) {
-					return type + "have already been fed.";
-				} else {
-					try {
-						stmt4 = con.createStatement();
-
-						// update item's qtystock in item table
-						stmt4.executeUpdate("update item set qtyinstock = " + (qtyoffood - numberofanimals)
-								+ " where itemid = 20 " + "and itemname = 'Animal Feed'");
-
-						// insert values into feeds table
-						stmt5 = con.createStatement();
-						stmt5.executeUpdate("insert into feeds values (20, 'Animal Feed', '" + type + "', " + sin
-								+ ", '" + currentDate + "'");
-
-						// committing changes made to database
-						con.commit();
-						stmt4.close();
-						stmt5.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					return "All " + type + " have been fed!";
-				}
-			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	}
 
+		// Query if animal has already been fed
+		String queryString3 = "select * from feeds where type = '" + type + "' and name = '" + name
+				+ "' and datefed = '" + currentDate + "'";
+		System.out.println(queryString3);
+		try {
+			stmt3 = con.createStatement();
+			rs = stmt3.executeQuery(queryString3);
+			if (rs.next()) {
+				System.out.println("Animal has already been fed.");
+				return "Animal has already been fed.";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		// Update query for feeds table
+		String queryString4 = "insert into feeds values(20, 'Animal Feed', '" + type + "', '" + name + "', " + sin
+				+ ", '" + currentDate + "')";
+		System.out.println(queryString4);
+		try {
+			stmt4 = con.createStatement();
+			int rowCount = stmt4.executeUpdate(queryString4);
+			con.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Animal has now been fed.");
+		return "Animal has now been fed.";
+	}
+	
+
+
+	
 
 
 	/*
