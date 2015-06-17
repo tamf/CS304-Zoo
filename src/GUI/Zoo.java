@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -106,6 +107,13 @@ public class Zoo extends JDialog {
 	        			f3t.add(text3);
         			inputbox.add(f3t);
         			
+        			JPanel image = new JPanel();
+        			ImageIcon imglbl = new ImageIcon("zoo.png");
+        			JLabel img = new JLabel();
+        			img.setIcon(imglbl);
+        			image.add(img);
+        			inputbox.add(image);
+        			
         		topbox.add(inputbox);
         		
         		JPanel displaybox = new JPanel();
@@ -145,7 +153,7 @@ public class Zoo extends JDialog {
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
     	                	ArrayList<String> input = lq.querySouvenir();
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the souvenir you'd like to buy from the zoo's souvenir shop in <b>Field 1</b>.</p><br><br><p> Available Souvenirs:<br>" + makeParagraph(input);
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the souvenir you'd like to buy from the zoo's souvenir shop in <b>Field 1</b></p><br><br><p> Available Souvenirs:<br>" + makeParagraph(input);
     	                    describe(d, "vis1");
     	                }       				
         			});       			
@@ -169,7 +177,7 @@ public class Zoo extends JDialog {
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
     	                	ArrayList<String> input = lq.queryFood();
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the food you'd like to buy from the zoo's cafeteria in <b>Field 1</b>.</p><br><br><p> Available Food:<br>" + makeParagraph(input);
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the food you'd like to buy from the zoo's cafeteria in <b>Field 1</b></p><br><br><p> Available Food:<br>" + makeParagraph(input);
     	                    describe(d, "vis3");
     	                }       				
         			});       			
@@ -180,7 +188,7 @@ public class Zoo extends JDialog {
         			vis4.addActionListener(new ActionListener() {       				
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to locate in <b>Field 1</b>.<br><br>Enter the name of the animal you'd like to locate in <b>Field 2</b></p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to locate in <b>Field 1</b><br><br>Enter the name of the animal you'd like to locate in <b>Field 2</b></p>";
     	                    describe(d, "vis4");
     	                }       				
         			});       			
@@ -191,7 +199,7 @@ public class Zoo extends JDialog {
         			vis5.addActionListener(new ActionListener() {       				
     	                @Override
     	                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section you'd like to locate in <b>Field 1</b>.</p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section you'd like to locate in <b>Field 1</b></p>";
     	                    describe(d, "vis5");
     	                }       				
         			});       			
@@ -211,7 +219,7 @@ public class Zoo extends JDialog {
 	    			man1.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to give a checkup in <b>Field 1</b>.<br><br>Enter the name of the animal you'd like to give a checkup in <b>Field 2</b><br><br>Enter the date to schedule the vet checkup in <b>Field 3</b></p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to give a checkup in <b>Field 1</b><br><br>Enter the name of the animal you'd like to give a checkup in <b>Field 2</b><br><br>Enter the date to schedule the vet checkup in <b>Field 3</b></p>";
     	                    describe(d, "man1");
 		                }       				
 	    			});       			
@@ -222,7 +230,7 @@ public class Zoo extends JDialog {
 	    			man2.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-		                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section theme you'd like to build in<b>Field 1</b>.<br><br>Enter the number of the new section in <b>Field 2</b></p>";
+		                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section theme you'd like to build in <b>Field 1</b><br><br>Enter the number of the new section in <b>Field 2</b></p>";
     	                    describe(d, "man2");
 		                }       				
 	    			});       			
@@ -233,7 +241,7 @@ public class Zoo extends JDialog {
 	    			man3.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-		                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section theme you'd like to build the enclosure in <b>Field 1</b>.<br><br>Enter the type of animal to be held in <b>Field 2</b></p>";
+		                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section theme you'd like to build the enclosure in <b>Field 1</b><br><br>Enter the type of animal to be held in <b>Field 2</b></p>";
     	                    describe(d, "man3");
 		                }       				
 	    			});       			
@@ -256,7 +264,8 @@ public class Zoo extends JDialog {
 	    			man5.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to feed in <b>Field 1</b>.<br><br>Enter the name of the animal you'd like to feed in <b>Field 2</b></p>";
+		                	ArrayList<String> input = lq.queryAllZookeeperInfo();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to feed in <b>Field 1</b><br><br>Enter the name of the animal you'd like to feed in <b>Field 2</b>.<br><br>Enter the sin of the employee that will feed it in <b>Field 3</b></p><br><br><p> Employees:<br>" + makeParagraph(input);
     	                    describe(d, "man5");
 		                }       				
 	    			});       			
@@ -267,7 +276,7 @@ public class Zoo extends JDialog {
 	    			man6.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of food you'd like to buy in <b>Field 1</b>.<br><br>Enter the amount you'd like to buy in <b>Field 2</b></p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of food you'd like to buy in <b>Field 1</b><br><br>Enter the amount you'd like to buy in <b>Field 2</b></p>";
     	                    describe(d, "man6");
 		                }       				
 	    			});       			
@@ -278,7 +287,7 @@ public class Zoo extends JDialog {
 	    			man7.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of souvenirs you'd like to buy in <b>Field 1</b>.<br><br>Enter the amount you'd like to buy in <b>Field 2</b></p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of souvenirs you'd like to buy in <b>Field 1</b><br><br>Enter the amount you'd like to buy in <b>Field 2</b></p>";
     	                    describe(d, "man6");
 		                }       				
 	    			});       			
@@ -289,7 +298,7 @@ public class Zoo extends JDialog {
 	    			man8.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to check for checkups in <b>Field 1</b>.<br><br>Enter the name of the animal you'd like to check for checkups in <b>Field 2</b><br><br>Enter the date of the checkup in <b>Field 3</b></p>";
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to check for checkups in <b>Field 1</b><br><br>Enter the name of the animal you'd like to check for checkups in <b>Field 2</b><br><br>Enter the date of the checkup in <b>Field 3</b></p>";
     	                    describe(d, "man8");
 		                }       				
 	    			});       			
@@ -326,7 +335,7 @@ public class Zoo extends JDialog {
         	outerbox.add(optionspanel);
         	
         setTitle("304 Zoo");
-        setSize(new Dimension(900, 600));
+        setSize(new Dimension(1000, 800));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -465,24 +474,27 @@ public class Zoo extends JDialog {
         			alert("<html><p color='red'> You must enter the type of animal you'd like to buy!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the name of the animal you'd like to buy!</p></html>");
-        		} else if (q3 == null || !isNumber(q2)) {
+        		} else if (q3 == null || !isNumber(q3)) {
 					alert("<html><p color='red'> You must enter the section id you'd like to put the animal in!</p></html>");
         		} else {      			
-        			String q4 = mt.adoptAnimal(q1, q2, getGender(), q1, Integer.parseInt(q3));
-        			if (q4 == "Animal adopted") {
-        				alert("<html><p color='green'> You bought a "+ q1 +" named " + q2 +" that lives in in section " + q4 +"</p></html>");
+        			String q4 = mt.adoptAnimal(q1, q2, getGender(), q1+"s", Integer.parseInt(q3));
+        			if (q4 == "Animal adopted!") {
+        				alert("<html><p color='green'> You bought a "+ q1 +" named " + q2 +" that lives in in section " + q3 +"</p></html>");
         			} else {
-        				alert("<html><p color='red'> That enclosure does not exist!</p></html>");
+        				alert("<html><p color='red'> " + q4 +"</p></html>");
         			}
         		}
         		break;
         	case "man5":
         		q1 = field1.getText();
         		q2 = field2.getText();
+        		q3 = field3.getText();
         		if (q1 == null || !isAlpha(q1)){
         			alert("<html><p color='red'> You must enter the type of animal you'd like to feed!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the name of the animal you'd like to feed!</p></html>");
+        		} else if (q2 == null || !isNumber(q2)) {
+					alert("<html><p color='red'> You must enter the sin of the employee that will feed the animal!</p></html>");
         		} else {
         			// Run Query, check if the animal exists
         			q1 = "Penguin";

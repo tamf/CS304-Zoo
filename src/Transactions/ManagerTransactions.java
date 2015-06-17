@@ -475,28 +475,96 @@ public class ManagerTransactions {
 	}
 	
 	public String adoptAnimal(String type, String name, String sex, String ht, int sn) {
-		java.util.Date utilDate = new Date();
-		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-		
-		try {
-			PreparedStatement ps = con.prepareStatement(
-					"insert into animallivein values(?,?,?,?,?,?)");
-			ps.setString(1, type);
-			ps.setString(2, name);
-			ps.setString(3, sex);
-			ps.setDate(4,sqlDate);
-			ps.setString(5,ht);
-			ps.setInt(6, sn);
-			ps.executeUpdate();
-			con.commit();
-			ps.close();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		System.out.println("Animal adopted");
-		return "Animal adopted";
-	}
+        java.util.Date utilDate = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+        Statement stmt1;
+        Statement stmt2;
+        Statement stmt3;
+        ResultSet rs;
+
+        int numberOfAnimals = 0;
+
+        boolean secAndHoldExist = false;
+        boolean animalExist = false;
+
+        String queryString3 = "select * from animallivein " +
+                "where type = '" + type +
+                "' and name = '" + name + "'";
+        try {
+            stmt3 = con.createStatement();
+            // result of query is stored in rs
+            rs = stmt3.executeQuery(queryString3);
+
+            if (rs.next()) {
+                animalExist = true;
+            }
+            stmt3.close();
+            if (animalExist)
+                return "Animal already exists!";
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String queryString = "select * from enclosurehas " +
+                "where sectionno = " + sn +
+                " and holdingtype = '" + ht + "'";
+        try {
+            stmt1 = con.createStatement();
+            // result of query is stored in rs
+            rs = stmt1.executeQuery(queryString);
+
+            if (rs.next()) {
+                secAndHoldExist = true;
+                numberOfAnimals = rs.getInt("numberofanimals");
+                try {
+                    PreparedStatement ps = con.prepareStatement(
+                            "insert into animallivein values(?,?,?,?,?,?)");
+                    ps.setString(1, type);
+                    ps.setString(2, name);
+                    ps.setString(3, sex);
+                    ps.setDate(4,sqlDate);
+                    ps.setString(5,ht);
+                    ps.setInt(6, sn);
+                    ps.executeUpdate();
+                    con.commit();
+                    ps.close();
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    stmt2 = con.createStatement();
+
+                    // update item's qtystock in item table
+                    stmt2.executeUpdate("update enclosurehas set numberofanimals = " + ++numberOfAnimals +
+                            " where sectionno = " + sn +
+                            " and holdingtype = '" + ht + "'");
+
+                    // committing changes made to database
+                    con.commit();
+                    stmt2.close();
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                secAndHoldExist = false;
+            }
+            // close statement to free up memory, this closes the ResultSet
+            // object aswell
+            stmt1.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (secAndHoldExist)
+            return "Animal adopted!";
+        else {
+            return "Section or Holding doesn't exist.";
+        }
+    }
+
 }
+
+
