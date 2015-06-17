@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 
@@ -118,13 +119,18 @@ public class Zoo extends JDialog {
         		
         		JPanel displaybox = new JPanel();
         		displaybox.setLayout(new BoxLayout(displaybox, BoxLayout.Y_AXIS));
-	        			
+        		
+        			
 	    			JPanel description = new JPanel();        		
 						String desc = querydescription;      			
 						JLabel desclabel = new JLabel(desc);
 						descriptionlabel = desclabel;
 						description.add(desclabel);
-					displaybox.add(description);
+					JScrollPane dpane = new JScrollPane(description,
+														JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+														JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);	
+					dpane.setPreferredSize(new Dimension(700, 400));
+					displaybox.add(dpane);
 					
 	    			JPanel alert = new JPanel();        		
 						String al = alertdescription;      			
@@ -219,7 +225,8 @@ public class Zoo extends JDialog {
 	    			man1.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to give a checkup in <b>Field 1</b><br><br>Enter the name of the animal you'd like to give a checkup in <b>Field 2</b><br><br>Enter the date to schedule the vet checkup in <b>Field 3</b></p>";
+		                	ArrayList<String> input = lq.queryAnimals();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the type of animal you'd like to give a checkup in <b>Field 1</b><br><br>Enter the name of the animal you'd like to give a checkup in <b>Field 2</b><br><br>Enter the date to schedule the vet checkup in <b>Field 3</b></p><br><br><p> Animals:<br>" + makeParagraph(input);
     	                    describe(d, "man1");
 		                }       				
 	    			});       			
@@ -335,7 +342,7 @@ public class Zoo extends JDialog {
         	outerbox.add(optionspanel);
         	
         setTitle("304 Zoo");
-        setSize(new Dimension(1000, 800));
+        setSize(new Dimension(1200, 800));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
