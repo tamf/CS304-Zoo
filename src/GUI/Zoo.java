@@ -241,7 +241,7 @@ public class Zoo extends JDialog {
 	    			man3.addActionListener(new ActionListener() {       				
 		                @Override
 		                public void actionPerformed(ActionEvent event) {
-		                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the name of the section theme you'd like to build the enclosure in <b>Field 1</b><br><br>Enter the type of animal to be held in <b>Field 2</b></p>";
+		                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the id of the section theme you'd like to build the enclosure in <b>Field 1</b><br><br>Enter the type of animal to be held in <b>Field 2</b></p>";
     	                    describe(d, "man3");
 		                }       				
 	    			});       			
@@ -493,18 +493,14 @@ public class Zoo extends JDialog {
         			alert("<html><p color='red'> You must enter the type of animal you'd like to feed!</p></html>");
         		} else if (q2 == null || !isAlpha(q2)) {
 					alert("<html><p color='red'> You must enter the name of the animal you'd like to feed!</p></html>");
-        		} else if (q2 == null || !isNumber(q2)) {
+        		} else if (q2 == null || !isNumber(q3)) {
 					alert("<html><p color='red'> You must enter the sin of the employee that will feed the animal!</p></html>");
         		} else {
-        			// Run Query, check if the animal exists
-        			q1 = "Penguin";
-        			q2 = "Dave";
-        			if (true) {
+        			String q4 = mt.feedAnimal(q1, q2, Integer.parseInt(q3));
+        			if (q4 == "Animal has now been fed.") {
         				alert("<html><p color='green'> You have fed the "+ q1 +" " + q2 + "</p></html>");
-        			} else if (false){
-        				alert("<html><p color='red'> That animal does not exist!</p></html>");
         			} else {
-        				alert("<html><p color='red'> The zoo needs to buy food before it can feed this animal!</p></html>");
+        				alert("<html><p color='red'>"+ q4 + "</p></html>");
         			}
         		}
         		break;
