@@ -303,7 +303,7 @@ public class LoadQueries {
         ResultSet rs;
         ArrayList<String> al = new ArrayList<String>();
 
-        String queryString = "select * from item, tourdirected where tourdirected.itemid = item.itemid";
+        String queryString = "select item.itemid, item.itemname, qtyinstock, price from item, tourdirected where tourdirected.itemid = item.itemid";
         try {
             stmt1 = con.createStatement();
             // result of query is stored in rs
