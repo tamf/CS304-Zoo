@@ -310,6 +310,41 @@ public class Zoo extends JDialog {
 		                }       				
 	    			});       			
 	    			mangrid.add(man8);
+	    			
+	    			JButton man9 = new JButton("Remove Employee f/ Section");
+	    			man9.setForeground(new Color(255, 0, 0).brighter());
+	    			man9.addActionListener(new ActionListener() {       				
+		                @Override
+		                public void actionPerformed(ActionEvent event) {
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>Enter the sin of the employee in <b>Field 1</b><br><br>Enter the section no the employee works in in <b>Field 2</b></p>";
+    	                    describe(d, "man9");
+		                }       				
+	    			});       			
+	    			mangrid.add(man9);
+	    			
+	    			JButton man10 = new JButton("Get VIP Visitors");
+	    			man10.setForeground(new Color(255, 0, 0).brighter());
+	    			man10.addActionListener(new ActionListener() {       				
+		                @Override
+		                public void actionPerformed(ActionEvent event) {
+		                	ArrayList<String> input = mt.findVisitorOfAllSections();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>The following is a list of the <b>VIP</b> zoo visitors that have visited every section!</p><br><br><p> Visitors:<br>" + makeParagraph(input);
+    	                    describe(d, "man10");
+		                }       				
+	    			});       			
+	    			mangrid.add(man10);
+	    			
+	    			JButton man11 = new JButton("See Checkup By Day");
+	    			man11.setForeground(new Color(255, 0, 0).brighter());
+	    			man11.addActionListener(new ActionListener() {       				
+		                @Override
+		                public void actionPerformed(ActionEvent event) {
+		                	ArrayList<String> input = mt.getNumAnimalsBySection();
+    	                	String d ="<html><p><b>Welcome to the Zoo</b></p><br><br><br><p>The following is a list of the number of animals per section.</p><br><br><p> Animal Counts:<br>" + makeParagraph(input);
+    	                    describe(d, "man11");
+		                }       				
+	    			});       			
+	    			mangrid.add(man11);
         		
         		gridbox.add(mangrid);
         		
@@ -342,7 +377,7 @@ public class Zoo extends JDialog {
         	outerbox.add(optionspanel);
         	
         setTitle("304 Zoo");
-        setSize(new Dimension(1200, 800));
+        setSize(new Dimension(1300, 800));
         setResizable(false);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -561,6 +596,26 @@ public class Zoo extends JDialog {
         				alert("<html><p color='green'>The "+ q1 +" " + q2 + " did not get a checkup on " + q3 +"</p></html>");
         			}                  			
         		}
+        		break;
+        	case "man9":
+        		q1 = field1.getText();
+        		q2 = field2.getText();
+        		if (q1 == null || !isNumber(q1)){
+        			alert("<html><p color='red'> You must enter the id of the employee you'd like to remove from the section!</p></html>");
+        		} else if (q2 == null || !isNumber(q2)) {
+        			alert("<html><p color='red'> You must enter the section number you'd like to remove the employee from!</p></html>");
+        		} else {
+        			q3 = mt.deleteFromWorkIn(Integer.parseInt(q1), Integer.parseInt(q2));
+        			if (q3 == "There does not exist an employee that works in this section.") {
+        				alert("<html><p color='red'>" + q3 + "</p></html>");
+        			}else {
+        				alert("<html><p color='green'>The "+ q3 +"</p></html>");
+        			}                  			
+        		}
+        		break;
+        	case "man10":
+        		break;
+        	case "man11":
         		break;
         	case "mandesc":
         		break;
