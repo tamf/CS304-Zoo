@@ -1,0 +1,45 @@
+select * from zookeepers,employee,workin where employee.sin = zookeepers.sin and workin.sin = employee.sin;
+select * from guides,employee,workin where employee.sin = guides.sin and workin.sin = employee.sin;
+select * from vet,employee where employee.sin = vet.sin;
+select * from section;
+select * from section,enclosurehas where section.sectionno = enclosurehas.sectionno;
+select * from animallivein;
+select * from checkup,employee where checkup.sin=employee.sin;
+select * from visitor;
+select * from visitor, visits where visitor.visitorno = visits.visitorno;
+select item.itemid, item.itemname, qtyinstock, price from item, tourdirected where tourdirected.itemid = item.itemid;
+select * from item, food where food.itemid = item.itemid;
+select * from item, souvenir where souvenir.itemid = item.itemid;
+select * from checkup where name=? and type=?;
+select * from checkup where name=? and type=? and date_checkup=?;
+UPDATE checkup SET date_checkup=? WHERE sin=? and type=? and name=?;
+select * from section where sectionno = sectionno;
+insert into section values(sectionno, theme);
+select * from enclosurehas where holdingtype = ? and sectionno = ?;
+insert into enclosurehas values(holdingtype , 0, sectionno);
+select count(*) from animallivein where type = ? and name = ?;
+select * from employee where sin = ?;
+select * from feeds where type = ? and name = ? and datefed = ?;
+select * from item where itemname = 'Animal Feed';
+insert into feeds values(20, 'Animal Feed', type, name, sin, currentDate);
+update item set qtyinstock = ? where itemname = 'Animal Feed';
+select * from item where itemid = ?;
+update item set qtyinstock = ? where itemid = ?;
+select * from animallivein where type = ? and name = ?;
+select * from enclosurehas where sectionno = ? and holdingtype = ?;
+insert into animallivein values(?,?,?,?,?,?);
+update enclosurehas set numberofanimals = ? where sectionno = ? and holdingtype = ?;
+select * from workin where sin = ? and sectionno = ?;
+delete from workin where sin = ? and sectionno = ?;
+select name from visitor v1 where not exists ((select sectionno from section) minus (select sectionno from visits v2 where v2.visitorno = v1.visitorno));
+select sectionno, sum(numberofanimals) from enclosurehas group by sectionno;
+select * from item where itemname = ?;
+update item set qtyinstock = ? where itemid = ?);
+insert into purchase values (itemid, itemName, currentDate, visitorno, currentDateTime, price);
+select sectionno from animallivein where name = nimalName and type = animalType;
+SELECT sectionno FROM section WHERE theme = ?;
+
+
+
+
+				

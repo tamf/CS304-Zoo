@@ -1,0 +1,7 @@
+Accomplishments of this Project
+
+Our project was a fun way for us to learn SQL and querying remotely in the format of a zoo visitation and management simulation. The app itself could be used in zoo management as a piece of management software (though this is probably unlikely) to keep track of the various stockkeeping, animal life and employees of a zoo. It also has a clean, fairly simple and easily understandable UI and quick querying with responsive feedback and error messaging. Overall, it is a simple, neat piece of software and was an excellent learning tool for our group.
+
+Changes to Schema
+
+The final schema differed from our original schema in several places. We added a name attribute to the item entity so that a visitor would be able to more easily query for items they could purchase. We added a receiptno attribute to the purchase relationship table to act as the primary key, allowing for multiple purchases by the same visitor of the same item. Out of all the functionalities we set out to implement for our project, none made use of the entities/relationships related to expenses/budget. Since our functionalities were sufficiently numerous and complex, we opted to remove these unused entities/relationships.
