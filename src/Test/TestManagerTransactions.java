@@ -29,7 +29,7 @@ public class TestManagerTransactions {
 		
 		//testDeleteFromWorkIn(578875478, 2);
 		
-		testFindVisitorInAllSection();
+		//testFindVisitorInAllSection();
 
 	}
 

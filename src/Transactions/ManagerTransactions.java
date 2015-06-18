@@ -224,14 +224,17 @@ public class ManagerTransactions {
 		ResultSet rs;
 
 		// Query if animal exists in animallivein table
-		String queryString1 = "select * from animallivein where type = '" + type + "' and name = '" + name + "'";
+		String queryString1 = "select count(*) from animallivein where type = '" + type + "' and name = '" + name + "'";
 		System.out.println(queryString1);
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString1);
-			if (!rs.next()) {
-				System.out.println("Animal does not exist");
-				return "Animal does not exist.";
+			while (rs.next()) {
+				if (rs.getInt("count(*)") == 0) {
+					System.out.println("Animal does not exist");
+					return "Animal does not exist.";
+				}
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
