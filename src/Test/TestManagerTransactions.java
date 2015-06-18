@@ -25,11 +25,13 @@ public class TestManagerTransactions {
 		
 		//testBuySupplies(1001, 20);
 		
-		testFeedAnimal("Zebra", "Charlie", 60839453);
+		//testFeedAnimal("Zebra", "Charlie", 60839453);
 		
 		//testDeleteFromWorkIn(578875478, 2);
 		
 		//testFindVisitorInAllSection();
+		
+		//testGetNumAnimalsBySection();
 
 	}
 
@@ -66,6 +68,13 @@ public class TestManagerTransactions {
 	
 	private static void testFindVisitorInAllSection() {
 		ArrayList<String> result = mt.findVisitorOfAllSections();
+		for (String s : result) {
+			System.out.println(s);
+		}
+	}
+	
+	private static void testGetNumAnimalsBySection() {
+		ArrayList<String> result = mt.getNumAnimalsBySection();
 		for (String s : result) {
 			System.out.println(s);
 		}

@@ -213,7 +213,8 @@ public class ManagerTransactions {
 
 	/*
 	 * Check if animal exists. Check if sin exists. Check if animal has already
-	 * been fed. Check if enough food. Then feed animal and update item table (subtract 1 from Animal Feed qtyinstock).
+	 * been fed. Check if enough food. Then feed animal and update item table
+	 * (subtract 1 from Animal Feed qtyinstock).
 	 */
 
 	public String feedAnimal(String type, String name, int sin) {
@@ -237,7 +238,7 @@ public class ManagerTransactions {
 					System.out.println("Animal does not exist");
 					return "Animal does not exist.";
 				}
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -271,7 +272,7 @@ public class ManagerTransactions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Query if there is enough food left
 		String queryString4 = "select * from item where itemname = 'Animal Feed'";
 		try {
@@ -299,23 +300,21 @@ public class ManagerTransactions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Update item table
 		String queryString6 = "update item set qtyinstock = " + --animalFeedQty + " where itemname = 'Animal Feed'";
 		System.out.println(queryString6);
 		try {
 			stmt6 = con.createStatement();
 			int rowCount = stmt6.executeUpdate(queryString6);
-			con.commit();   // COMMIT CHANGES
+			con.commit(); // COMMIT CHANGES
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("Animal has now been fed.");
 		return "Animal has now been fed.";
 	}
-	
-	
 
 	/*
 	 * Given itemid, amount, purchase that item and update in the item table.
@@ -497,7 +496,7 @@ public class ManagerTransactions {
 		ResultSet rs;
 		String name;
 		ArrayList<String> result = new ArrayList<String>();
-		
+
 		// get names from visitor where that visitor has visited all sections
 		String queryString = "select name from visitor v1 where not exists "
 				+ "((select sectionno from section) minus (select sectionno from visits v2 where v2.visitorno = v1.visitorno))";
@@ -505,7 +504,7 @@ public class ManagerTransactions {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);
 			while (rs.next()) {
-				 name = rs.getString("name");
+				name = rs.getString("name");
 				result.add("Name: " + name);
 			}
 			stmt1.close();
@@ -513,6 +512,35 @@ public class ManagerTransactions {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	/*
+	 * Get number of animals by section for all sections
+	 */
+	public ArrayList<String> getNumAnimalsBySection() {
+		Statement stmt1;
+		ResultSet rs;
+		int numAnimals;
+		int sectionno;
+		String rowResult;
+		ArrayList<String> result = new ArrayList<String>();
+
+		String queryString = "select sectionno, sum(numberofanimals) from enclosurehas group by sectionno";
+		System.out.println(queryString);
+		try {
+			stmt1 = con.createStatement();
+			rs = stmt1.executeQuery(queryString);
+			while (rs.next()) {
+				sectionno = rs.getInt("sectionno");
+				numAnimals = rs.getInt("sum(numberofanimals)");
+				rowResult = "Section No: " + sectionno + ", Number of Animals: " + numAnimals;
+				result.add(rowResult);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
 	}
 
 }
