@@ -25,6 +25,8 @@ public class TestManagerTransactions {
 		//testBuySupplies(1001, 20);
 		
 		//testFeedAnimal("Lion", "Leo", 60839453);
+		
+		//testDeleteFromWorkIn(578875478, 2);
 
 	}
 
@@ -51,6 +53,11 @@ public class TestManagerTransactions {
 	
 	private static void testFeedAnimal(String type, String name, int sin) {
 		String result = mt.feedAnimal(type, name, sin);
+		System.out.println(result);
+	}
+	
+	private static void testDeleteFromWorkIn(int sin, int sectionno) {
+		String result = mt.deleteFromWorkIn(sin, sectionno);
 		System.out.println(result);
 	}
 	
