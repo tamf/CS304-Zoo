@@ -455,24 +455,27 @@ public class ManagerTransactions {
 	 * Find visitors who has visited all sections.
 	 */
 
-	public ArrayList<String> findVisitorInAllSection() {
+	public ArrayList<String> findVisitorOfAllSections() {
 		Statement stmt1;
 		ResultSet rs;
-		ArrayList<String> al = new ArrayList<String>();
+		String name;
+		ArrayList<String> result = new ArrayList<String>();
+		
+		// get names from visitor where that visitor has visited all sections
 		String queryString = "select name from visitor v1 where not exists "
 				+ "((select sectionno from section) minus (select sectionno from visits v2 where v2.visitorno = v1.visitorno))";
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString);
 			while (rs.next()) {
-				String name = rs.getString("name");
-				al.add("Name: " + name);
+				 name = rs.getString("name");
+				result.add("Name: " + name);
 			}
 			stmt1.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return al;
+		return result;
 	}
 
 }

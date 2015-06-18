@@ -65,7 +65,7 @@ public class TestManagerTransactions {
 	}
 	
 	private static void testFindVisitorInAllSection() {
-		ArrayList<String> result = mt.findVisitorInAllSection();
+		ArrayList<String> result = mt.findVisitorOfAllSections();
 		for (String s : result) {
 			System.out.println(s);
 		}
