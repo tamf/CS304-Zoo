@@ -213,7 +213,7 @@ public class ManagerTransactions {
 
 	/*
 	 * Check if animal exists. Check if sin exists. Check if animal has already
-	 * been fed. Then feed animal.
+	 * been fed. Check if enough food. Then feed animal and update item table (subtract 1 from Animal Feed qtyinstock).
 	 */
 
 	public String feedAnimal(String type, String name, int sin) {
@@ -221,7 +221,10 @@ public class ManagerTransactions {
 		Statement stmt2;
 		Statement stmt3;
 		Statement stmt4;
+		Statement stmt5;
+		Statement stmt6;
 		ResultSet rs;
+		int animalFeedQty = 0;
 
 		// Query if animal exists in animallivein table
 		String queryString1 = "select count(*) from animallivein where type = '" + type + "' and name = '" + name + "'";
@@ -268,21 +271,51 @@ public class ManagerTransactions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		// Update query for feeds table
-		String queryString4 = "insert into feeds values(20, 'Animal Feed', '" + type + "', '" + name + "', " + sin
-				+ ", '" + currentDate + "')";
-		System.out.println(queryString4);
+		
+		// Query if there is enough food left
+		String queryString4 = "select * from item where itemname = 'Animal Feed'";
 		try {
 			stmt4 = con.createStatement();
-			int rowCount = stmt4.executeUpdate(queryString4);
-			con.commit();
+			rs = stmt4.executeQuery(queryString4);
+			while (rs.next()) {
+				animalFeedQty = rs.getInt("qtyinstock");
+				System.out.println("Animal Feed Qty = " + animalFeedQty);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (animalFeedQty == 0) {
+			System.out.println("No Animal Feed left.");
+			return "No Animal Feed left.";
+		}
+
+		// Update query for feeds table
+		String queryString5 = "insert into feeds values(20, 'Animal Feed', '" + type + "', '" + name + "', " + sin
+				+ ", '" + currentDate + "')";
+		System.out.println(queryString5);
+		try {
+			stmt5 = con.createStatement();
+			int rowCount = stmt5.executeUpdate(queryString5);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		// Update item table
+		String queryString6 = "update item set qtyinstock = " + --animalFeedQty + " where itemname = 'Animal Feed'";
+		System.out.println(queryString6);
+		try {
+			stmt6 = con.createStatement();
+			int rowCount = stmt6.executeUpdate(queryString6);
+			con.commit();   // COMMIT CHANGES
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		System.out.println("Animal has now been fed.");
 		return "Animal has now been fed.";
 	}
+	
+	
 
 	/*
 	 * Given itemid, amount, purchase that item and update in the item table.
@@ -320,6 +353,7 @@ public class ManagerTransactions {
 		try {
 			stmt2 = con.createStatement();
 			rs = stmt2.executeQuery(queryString2);
+			con.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -13,8 +13,7 @@ public class TestVisitorTransactions {
 		connectToDatabase();
 		vt = new VisitorTransactions(con, 1);
 		
-		String s = "Tiger Toy";
-		testPurchaseItem(s, 1);
+		//testPurchaseItem("Tiger Toy", 1);
 		
 		
 		//testGetSectionOfAnimal("Angel", "Dolphin");
