@@ -1,6 +1,7 @@
 package Test;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import DatabaseConnection.DatabaseConnection;
 import Transactions.ManagerTransactions;
@@ -27,6 +28,8 @@ public class TestManagerTransactions {
 		//testFeedAnimal("Lion", "Leo", 60839453);
 		
 		//testDeleteFromWorkIn(578875478, 2);
+		
+		testFindVisitorInAllSection();
 
 	}
 
@@ -59,6 +62,13 @@ public class TestManagerTransactions {
 	private static void testDeleteFromWorkIn(int sin, int sectionno) {
 		String result = mt.deleteFromWorkIn(sin, sectionno);
 		System.out.println(result);
+	}
+	
+	private static void testFindVisitorInAllSection() {
+		ArrayList<String> result = mt.findVisitorInAllSection();
+		for (String s : result) {
+			System.out.println(s);
+		}
 	}
 	
 	

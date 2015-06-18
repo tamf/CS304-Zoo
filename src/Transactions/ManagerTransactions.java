@@ -419,21 +419,21 @@ public class ManagerTransactions {
 		Statement stmt1;
 		Statement stmt2;
 		ResultSet rs;
-		
+
 		// Query if employee sin and sectionno exist in the workin table
 		String queryString1 = "select * from workin where sin = " + sin + " and sectionno = " + sectionno;
 		System.out.println(queryString1);
 		try {
 			stmt1 = con.createStatement();
 			rs = stmt1.executeQuery(queryString1);
-			
+
 			if (!rs.next()) {
 				return "There does not exist an employee that works in this section.";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Delete from the workin table
 		String queryString2 = "delete from workin where sin = " + sin + " and sectionno = " + sectionno;
 		System.out.println(queryString2);
@@ -444,11 +444,35 @@ public class ManagerTransactions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		String returnString = "Employee " + sin + " removed from section " + sectionno + ".";
 		System.out.println(returnString);
 		return returnString;
 
+	}
+
+	/*
+	 * Find visitors who has visited all sections.
+	 */
+
+	public ArrayList<String> findVisitorInAllSection() {
+		Statement stmt1;
+		ResultSet rs;
+		ArrayList<String> al = new ArrayList<String>();
+		String queryString = "select name from visitor v1 where not exists "
+				+ "((select sectionno from section) minus (select sectionno from visits v2 where v2.visitorno = v1.visitorno))";
+		try {
+			stmt1 = con.createStatement();
+			rs = stmt1.executeQuery(queryString);
+			while (rs.next()) {
+				String name = rs.getString("name");
+				al.add("Name: " + name);
+			}
+			stmt1.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return al;
 	}
 
 }
