@@ -18,7 +18,8 @@ public class DatabaseConnection {
 	private static DatabaseConnection databaseConnection = null;
 	public Connection con;
 	
-	public DatabaseConnection() {
+	// call DatabaseConnection.getInstance() to get an instance of this class
+	private DatabaseConnection() {
 	}
 	
 	// singleton pattern: returns instance of DatabaseConnection

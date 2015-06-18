@@ -46,7 +46,7 @@ public class Zoo extends JDialog {
 	
 	public Zoo() {
 		
-		dc = new DatabaseConnection();
+		dc = DatabaseConnection.getInstance();
 		dc.connectToDB();
 		Connection con = dc.getConnection();
 		mt = new ManagerTransactions(con);
