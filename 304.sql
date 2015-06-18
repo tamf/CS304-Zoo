@@ -19,7 +19,6 @@ drop table addto cascade constraints;
 drop table zoobudget cascade constraints;
 drop table expensededucts cascade constraints;
 drop table getsupplies cascade constraints;
-drop table orderanimal cascade constraints;
 
 create table employee(
 	sin number(9,0) primary key,
@@ -191,15 +190,6 @@ create table getsupplies(
 	foreign key(itemid,itemname) references item
 );
 
-create table orderanimal(
-	orderid integer,
-	type varchar(20),
-	name varchar(20),
-	primary key(orderid,type,name),
-	foreign key(orderid) references expensededucts
-);
-
-
 insert into employee values(123456789, 30000.00, 'Joe Schmoe');
 insert into employee values(060839453, 35000.00, 'Pete Blake');
 insert into employee values(351565322, 42000.00, 'Susan Nguyen');
@@ -332,11 +322,14 @@ insert into visitor values(5, 'Michael');
 insert into visits values(1, 1);
 insert into visits values(1, 2);
 insert into visits values(2, 5);
+insert into visits values(2, 1);
 insert into visits values(3, 5);
+insert into visits values(3, 1);
 insert into visits values(4, 3);
 insert into visits values(4, 2);
 insert into visits values(4, 1);
 insert into visits values(5, 4);
+insert into visits values(5, 1);
 
 insert into item values(10, 'Hot Dog', 5.75, 200);
 insert into item values(11, 'Hamburger', 7.50, 150);
@@ -392,8 +385,6 @@ insert into zoobudget values(10011, 47063.29);
 insert into expensededucts values(20001, 10007, 287.50, '2015-06-07');
 insert into expensededucts values(20002, 10008, 299.90, '2015-06-07');
 insert into expensededucts values(20003, 10009, 500.00, '2015-06-07');
-insert into expensededucts values(20004, 10010, 1000.00, '2015-06-07');
-insert into expensededucts values(20005, 10011, 1000.00, '2015-06-07');
 
 insert into addto values(10, 'Hot Dog', 1, 1, 10001);
 insert into addto values(14, 'Rainforest Adventure Tour', 2, 2, 10002);
@@ -405,9 +396,6 @@ insert into addto values(16, 'Urban Jungle Tour', 4, 6, 10006);
 insert into getsupplies values(20001, 10, 'Hot Dog', 100);
 insert into getsupplies values(20002, 19, 'Dolphin Toy', 20);
 insert into getsupplies values(20003, 20, 'Animal Feed', 100);
-
-insert into orderanimal values(20004, 'Lion', 'Mufasa');
-insert into orderanimal values(20005, 'Shark', 'Tick');
 
 
 commit;
