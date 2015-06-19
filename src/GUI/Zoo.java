@@ -334,7 +334,7 @@ public class Zoo extends JDialog {
 	    			});       			
 	    			mangrid.add(man10);
 	    			
-	    			JButton man11 = new JButton("See Checkup By Day");
+	    			JButton man11 = new JButton("Get Animals Per Enclosure");
 	    			man11.setForeground(new Color(255, 0, 0).brighter());
 	    			man11.addActionListener(new ActionListener() {       				
 		                @Override
