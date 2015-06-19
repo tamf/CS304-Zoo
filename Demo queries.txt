@@ -1,0 +1,31 @@
+1) Projection and selection (user specifies selection constant)
+
+Visitor.getSectionOfAnimal
+
+2) Join
+
+LoadQueries.queryAllZookeeperInfo
+
+3) Division
+-insert a new tuple and rerun
+
+Manager.findVisitorOfAllSections
+
+
+4) Aggregation
+-rerun with diff aggregation
+
+Manager.feedAnimal (count(*))
+
+
+5) Nested aggregation
+
+Manager.getNumAnimalsBySection (sum(*))
+
+6) Deletion
+
+Manager.deleteFromWorkIn
+
+7) Update
+
+Manager.buySupplies
